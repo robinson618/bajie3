@@ -102,4 +102,3 @@ async function handleLogin() {
   }
 }
 </script>
-VUEEOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-780970775fdf428da04ea8bac8e7705c/cwd.txt'; exit "$__tr_native_ec"

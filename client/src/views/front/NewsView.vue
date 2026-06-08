@@ -156,4 +156,3 @@ onMounted(() => {
   fetchNews()
 })
 </script>
-VUEEOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-4dbdf7c527d2452da42ee33f6ea47c17/cwd.txt'; exit "$__tr_native_ec"

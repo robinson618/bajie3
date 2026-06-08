@@ -144,4 +144,3 @@ onMounted(async () => {
 .prose th { background-color: #f3f4f6; padding: 0.75rem 1rem; text-align: left; border: 1px solid #d1d5db; font-weight: 600; }
 .prose td { padding: 0.75rem 1rem; border: 1px solid #d1d5db; }
 </style>
-VUEEOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-6ecb35ce7b724568a214806f2d517311/cwd.txt'; exit "$__tr_native_ec"

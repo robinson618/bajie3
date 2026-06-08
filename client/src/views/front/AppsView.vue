@@ -127,4 +127,3 @@ onMounted(() => {
   fetchApps()
 })
 </script>
-VUEEOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-dd52226655b443f09bb4f993f3a54328/cwd.txt'; exit "$__tr_native_ec"

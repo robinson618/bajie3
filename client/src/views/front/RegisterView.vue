@@ -152,4 +152,3 @@ async function handleRegister() {
   }
 }
 </script>
-VUEEOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-cf1a5ddb8fb84b9488f29b9567b6c668/cwd.txt'; exit "$__tr_native_ec"
