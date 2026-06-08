@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   mysql:
     image: mysql:8.0
@@ -12,6 +13,50 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - bajie-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: bajie-server
+    restart: unless-stopped
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 3000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    volumes:
+      - uploads_data:/app/uploads
+    networks:
+      - bajie-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: bajie-client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - bajie-network
+
+networks:
+  bajie-network:
+    driver: bridge
+
 volumes:
   mysql_data:
-EOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-f013e29f777544ca8ed63609de22149e/cwd.txt'; exit "$__tr_native_ec"
+  uploads_data:
