@@ -83,7 +83,7 @@
           <a-input v-model="form.question" placeholder="请输入问题" />
         </a-form-item>
         <a-form-item label="分类" required>
-          <a-select v-model="form.category" placeholder="请选择分类" allow-create>
+          <a-select v-model="form.category" placeholder="请选择分类">
             <a-option v-for="c in categoryList" :key="c.id" :value="c.name">{{ c.name }}</a-option>
           </a-select>
         </a-form-item>

@@ -54,9 +54,7 @@
           <a-input v-model="form.title" placeholder="请输入标题" />
         </a-form-item>
         <a-form-item label="分类" required>
-          <a-select v-model="form.category" placeholder="请选择分类" allow-create>
-            <a-option v-for="c in categories" :key="c" :value="c">{{ c }}</a-option>
-          </a-select>
+          <a-input v-model="form.category" placeholder="请输入分类（如：技术前沿、行业动态）" />
         </a-form-item>
         <a-form-item label="作者">
           <a-input v-model="form.author" placeholder="请输入作者" />

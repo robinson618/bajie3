@@ -45,7 +45,7 @@
 
             <label class="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" v-model="form.agreeTerms" class="w-4 h-4 text-primary rounded focus:ring-primary" />
-              <span class="text-sm text-gray-500">我已阅读并同意 <router-link to="/privacy" class="text-primary hover:text-primary/80">用户隐私协议</router-link> 和 <router-link to="/terms" class="text-primary hover:text-primary/80">服务条款</router-link></span>
+              <span class="text-sm text-gray-500">我已阅读并同意 <a href="#" class="text-primary hover:text-primary/80">用户隐私协议</a> 和 <a href="#" class="text-primary hover:text-primary/80">服务条款</a></span>
             </label>
 
             <button
