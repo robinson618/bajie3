@@ -136,11 +136,9 @@ async function handleDelete(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form. = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.cover_image = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
-} else options.onError(res); }
-  catch (e) { options.onError(e); }
 }
 function onFileChange(fileListVal: any[]) { fileList.value = fileListVal; }
 

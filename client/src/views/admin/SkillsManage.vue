@@ -98,7 +98,7 @@
           <a-textarea v-model="form.content" placeholder="请输入内容" :auto-size="{ minRows: 6 }" />
         </a-form-item>
         <a-form-item label="封面图">
-          <a-upload :limit="1" list-type="picture-card" :custom-request="handleUpload as any" :file-list="fileList" @change="onFileChange" accept="image/*">
+          <a-upload :limit="1" list-type="picture-card" :custom-request="handleUpload" :file-list="fileList" @change="onFileChange" accept="image/*">
             <template #upload-button><a-button>选择图片</a-button></template>
           </a-upload>
         </a-form-item>
@@ -174,7 +174,7 @@ async function fetchCategories() {
   finally { catLoading.value = false; }
 }
 
-function onTabChange(key: string | number): void { if (key === 'categories') fetchCategories(); }
+function onTabChange(_key: string | number) { if (_key === 'categories') fetchCategories(); }
 function onPageChange(page: number) { pagination.current = page; fetchList(); }
 
 function openModal(record?: any) {
@@ -221,13 +221,13 @@ async function handleDeleteCategory(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form. = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.cover_image = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
-} else options.onError(res); }
-  catch (e) { options.onError(e); }
+  return { abort: () => {} };
 }
 function onFileChange(fileListVal: any[]) { fileList.value = fileListVal; }
 
 onMounted(() => { fetchList(); fetchCategories(); });
 </script>
+VUEEOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-fe9afb9d112845bea193e155aac4fd81/cwd.txt'; exit "$__tr_native_ec"

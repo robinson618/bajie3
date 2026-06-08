@@ -52,7 +52,7 @@
           <a-input v-model="form.link_url" placeholder="请输入跳转链接" />
         </a-form-item>
         <a-form-item label="图片" required>
-          <a-upload :limit="1" list-type="picture-card" :custom-request="handleUpload as any" :file-list="fileList" @change="onFileChange" accept="image/*">
+          <a-upload :limit="1" list-type="picture-card" :custom-request="handleUpload" :file-list="fileList" @change="onFileChange" accept="image/*">
             <template #upload-button><a-button>选择图片</a-button></template>
           </a-upload>
         </a-form-item>
@@ -131,14 +131,13 @@ async function handleDelete(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form. = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.image_url = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
-}
-    else options.onError(res);
-  } catch (e) { options.onError(e); }
+  return { abort: () => {} };
 }
 function onFileChange(fileListVal: any[]) { fileList.value = fileListVal; }
 
 onMounted(fetchList);
 </script>
+VUEEOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-ee56e578c73442f58dac7ff2c60a425c/cwd.txt'; exit "$__tr_native_ec"
