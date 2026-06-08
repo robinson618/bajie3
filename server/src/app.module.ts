@@ -11,9 +11,13 @@ import { FaqModule } from './modules/faq/faq.module';
 import { OpenSourceModule } from './modules/open-source/open-source.module';
 import { DiscussionsModule } from './modules/discussions/discussions.module';
 import { DocumentsModule } from './modules/documents/documents.module';
-import { DemandsModule } from './modules/demands/demands.module';
-import { IncubateModule } from './modules/incubate/incubate.module';
-import { BannersModule } from './modules/banners/banners.module';
+import { SiteConfigModule } from './modules/site-config/site-config.module';
+import { NavMenusModule } from './modules/nav-menus/nav-menus.module';
+import { FooterModule } from './modules/footer/footer.module';
+import { PagesModule } from './modules/pages/pages.module';
+import { UploadModule } from './modules/upload/upload.module';
+import { UsersModule } from './modules/users/users.module';
+import { StatsModule } from './modules/stats/stats.module';
 
 @Module({
   imports: [
@@ -34,9 +38,13 @@ import { BannersModule } from './modules/banners/banners.module';
     OpenSourceModule,
     DiscussionsModule,
     DocumentsModule,
-    DemandsModule,
-    IncubateModule,
-    BannersModule,
+    SiteConfigModule,
+    NavMenusModule,
+    FooterModule,
+    PagesModule,
+    UploadModule,
+    UsersModule,
+    StatsModule,
   ],
 })
 export class AppModule {}
