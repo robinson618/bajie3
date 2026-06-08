@@ -12,8 +12,8 @@ export class SkillsController {
   constructor(private skillsService: SkillsService) {}
 
   @Get('skills')
-  findAll(@Query('page') page?: string, @Query('pageSize') pageSize?: string, @Query('skill_category') skillCategory?: string) {
-    return this.skillsService.findAll(+(page ?? '1') || 1, +(pageSize ?? '10') || 10, skillCategory);
+  findAll(@Query('page') page = '1', @Query('pageSize') pageSize = '10', @Query('skill_category') skillCategory?: string) {
+    return this.skillsService.findAll(+page, +pageSize, skillCategory);
   }
 
   @Get('skills/:id')

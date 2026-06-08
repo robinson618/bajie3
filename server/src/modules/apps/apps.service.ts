@@ -17,7 +17,7 @@ export class AppsService {
   async findAll(page = 1, pageSize = 10) {
     const [items, total] = await this.appRepo.findAndCount({
       where: { isPublished: 1 },
-      relations: ['capabilities'],
+      relations: { capabilities: true },
       order: { createdAt: 'DESC' },
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -26,7 +26,7 @@ export class AppsService {
   }
 
   async findOne(id: number) {
-    const app = await this.appRepo.findOne({ where: { id }, relations: ['capabilities'] });
+    const app = await this.appRepo.findOne({ where: { id }, relations: { capabilities: true } });
     if (!app) throw new NotFoundException('应用不存在');
     await this.appRepo.increment({ id }, 'views', 1);
     return app;
@@ -44,7 +44,7 @@ export class AppsService {
       const caps = capabilities.map((c) => this.capabilityRepo.create({ ...c, appId: savedApp.id }));
       await this.capabilityRepo.save(caps);
     }
-    return this.appRepo.findOne({ where: { id: savedApp.id }, relations: ['capabilities'] });
+    return this.appRepo.findOne({ where: { id: savedApp.id }, relations: { capabilities: true } });
   }
 
   async update(id: number, dto: UpdateAppDto) {
@@ -58,7 +58,7 @@ export class AppsService {
       const caps = capabilities.map((c) => this.capabilityRepo.create({ ...c, appId: id }));
       await this.capabilityRepo.save(caps);
     }
-    return this.appRepo.findOne({ where: { id }, relations: ['capabilities'] });
+    return this.appRepo.findOne({ where: { id }, relations: { capabilities: true } });
   }
 
   async remove(id: number) {

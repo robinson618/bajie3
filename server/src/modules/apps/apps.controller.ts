@@ -12,8 +12,8 @@ export class AppsController {
   constructor(private appsService: AppsService) {}
 
   @Get('apps')
-  findAll(@Query('page') page?: string, @Query('pageSize') pageSize?: string) {
-    return this.appsService.findAll(+page || 1, +pageSize || 10);
+  findAll(@Query('page') page = '1', @Query('pageSize') pageSize = '10') {
+    return this.appsService.findAll(+page, +pageSize);
   }
 
   @Get('apps/:id')
