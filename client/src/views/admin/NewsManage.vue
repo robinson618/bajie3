@@ -28,11 +28,11 @@
           <a-table-column title="标题" data-index="title" :width="240" ellipsis />
           <a-table-column title="分类" data-index="category" :width="100" />
           <a-table-column title="作者" data-index="author" :width="100" />
-          <a-table-column title="浏览量" data-index="viewCount" :width="80" />
+          <a-table-column title="浏览量" data-index="views" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
-              <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
-                {{ record.status === 'published' ? '已发布' : '草稿' }}
+              <a-tag :color="record.isPublished === 1 ? 'green' : 'orange'">
+                {{ record.isPublished === 1 ? '已发布' : '草稿' }}
               </a-tag>
             </template>
           </a-table-column>
@@ -73,9 +73,9 @@
           </a-upload>
         </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="draft">草稿</a-option>
-            <a-option value="published">已发布</a-option>
+          <a-select v-model="form.isPublished">
+            <a-option :value="0">草稿</a-option>
+            <a-option :value="1">已发布</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -102,11 +102,11 @@ const fileList = ref<any[]>([]);
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
 const form = reactive({
-  title: '', category: '', author: '', summary: '', content: '', coverImage: '', status: 'draft',
+  title: '', category: '', author: '', summary: '', content: '', coverImage: '', isPublished: 0,
 });
 
 function resetForm() {
-  Object.assign(form, { title: '', category: '', author: '', summary: '', content: '', coverImage: '', status: 'draft' });
+  Object.assign(form, { title: '', category: '', author: '', summary: '', content: '', coverImage: '', isPublished: 0 });
   fileList.value = [];
 }
 
@@ -132,7 +132,7 @@ function openModal(record?: any) {
   if (record) {
     isEdit.value = true;
     editId.value = record.id;
-    Object.assign(form, { title: record.title, category: record.category, author: record.author, summary: record.summary, content: record.content, coverImage: record.coverImage, status: record.status });
+    Object.assign(form, { title: record.title, category: record.category, author: record.author, summary: record.summary, content: record.content, coverImage: record.coverImage, isPublished: record.isPublished });
     if (record.coverImage) fileList.value = [{ uid: '-1', name: 'cover', url: record.coverImage }];
   } else {
     isEdit.value = false;

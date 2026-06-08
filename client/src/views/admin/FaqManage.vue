@@ -34,11 +34,11 @@
             <a-table-column title="问题" data-index="question" :width="240" ellipsis />
             <a-table-column title="分类" data-index="category" :width="100" />
             <a-table-column title="排序" data-index="sortOrder" :width="80" />
-            <a-table-column title="浏览量" data-index="viewCount" :width="80" />
+            <a-table-column title="浏览量" data-index="views" :width="80" />
             <a-table-column title="状态" :width="80">
               <template #cell="{ record }">
-                <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
-                  {{ record.status === 'published' ? '已发布' : '草稿' }}
+                <a-tag :color="record.isActive === 1 ? 'green' : 'red'">
+                  {{ record.isActive === 1 ? '启用' : '禁用' }}
                 </a-tag>
               </template>
             </a-table-column>
@@ -93,10 +93,10 @@
         <a-form-item label="排序">
           <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
-        <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="draft">草稿</a-option>
-            <a-option value="published">已发布</a-option>
+        <a-form-item label="是否启用">
+          <a-select v-model="form.isActive">
+            <a-option :value="0">禁用</a-option>
+            <a-option :value="1">启用</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -140,11 +140,11 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ question: '', category: '', answer: '', sortOrder: 0, status: 'draft' });
+const form = reactive({ question: '', category: '', answer: '', sortOrder: 0, isActive: 0 });
 const catForm = reactive({ name: '', description: '', sortOrder: 0 });
 
 function resetForm() {
-  Object.assign(form, { question: '', category: '', answer: '', sortOrder: 0, status: 'draft' });
+  Object.assign(form, { question: '', category: '', answer: '', sortOrder: 0, isActive: 0 });
 }
 function resetCatForm() {
   Object.assign(catForm, { name: '', description: '', sortOrder: 0 });

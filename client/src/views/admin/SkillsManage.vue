@@ -31,15 +31,15 @@
 
         <a-table :data="list" :pagination="pagination" :loading="loading" @page-change="onPageChange" row-key="id">
           <template #columns>
-            <a-table-column title="名称" data-index="name" :width="160" ellipsis />
+            <a-table-column title="名称" data-index="title" :width="160" ellipsis />
             <a-table-column title="分类" data-index="skillCategory" :width="100" />
             <a-table-column title="版本" data-index="version" :width="80" />
-            <a-table-column title="下载量" data-index="downloadCount" :width="80" />
-            <a-table-column title="浏览量" data-index="viewCount" :width="80" />
+            <a-table-column title="下载量" data-index="downloads" :width="80" />
+            <a-table-column title="浏览量" data-index="views" :width="80" />
             <a-table-column title="状态" :width="80">
               <template #cell="{ record }">
-                <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
-                  {{ record.status === 'published' ? '已发布' : '草稿' }}
+                <a-tag :color="record.isPublished === 1 ? 'green' : 'orange'">
+                  {{ record.isPublished === 1 ? '已发布' : '草稿' }}
                 </a-tag>
               </template>
             </a-table-column>
@@ -62,7 +62,7 @@
         </a-button>
         <a-table :data="categoryList" :loading="catLoading" row-key="id" :pagination="false">
           <template #columns>
-            <a-table-column title="分类名称" data-index="name" />
+            <a-table-column title="分类名称" data-index="title" />
             <a-table-column title="描述" data-index="description" />
             <a-table-column title="排序" data-index="sortOrder" :width="80" />
             <a-table-column title="操作" :width="160">
@@ -80,8 +80,8 @@
 
     <a-modal v-model:visible="modalVisible" :title="isEdit ? '编辑技能' : '新增技能'" @ok="handleSubmit" :mask-closable="false">
       <a-form :model="form" layout="vertical">
-        <a-form-item label="名称" required>
-          <a-input v-model="form.name" placeholder="请输入技能名称" />
+        <a-form-item label="标题" required>
+          <a-input v-model="form.title" placeholder="请输入技能标题" />
         </a-form-item>
         <a-form-item label="分类" required>
           <a-select v-model="form.skillCategory" placeholder="请选择分类" allow-create>
@@ -103,9 +103,9 @@
           </a-upload>
         </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="draft">草稿</a-option>
-            <a-option value="published">已发布</a-option>
+          <a-select v-model="form.isPublished">
+            <a-option :value="0">草稿</a-option>
+            <a-option :value="1">已发布</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -150,10 +150,10 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ name: '', skillCategory: '', version: '', description: '', content: '', coverImage: '', status: 'draft' });
+const form = reactive({ title: '', skillCategory: '', version: '', description: '', content: '', coverImage: '', isPublished: 0 });
 const catForm = reactive({ name: '', description: '', sortOrder: 0 });
 
-function resetForm() { Object.assign(form, { name: '', skillCategory: '', version: '', description: '', content: '', coverImage: '', status: 'draft' }); fileList.value = []; }
+function resetForm() { Object.assign(form, { title: '', skillCategory: '', version: '', description: '', content: '', coverImage: '', isPublished: 0 }); fileList.value = []; }
 function resetCatForm() { Object.assign(catForm, { name: '', description: '', sortOrder: 0 }); }
 
 async function fetchList() {
@@ -192,7 +192,7 @@ function openCategoryModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.name || !form.skillCategory) { Message.warning('请填写必填项'); return; }
+  if (!form.title || !form.skillCategory) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await skillsApi.update(editId.value, form) : await skillsApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }

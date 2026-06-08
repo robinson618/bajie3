@@ -34,11 +34,10 @@
             <a-table-column title="标题" data-index="title" :width="200" ellipsis />
             <a-table-column title="版本" data-index="version" :width="80" />
             <a-table-column title="分类" data-index="category" :width="100" />
-            <a-table-column title="星标数" data-index="starCount" :width="80" />
-            <a-table-column title="状态" :width="80">
+              <a-table-column title="状态" :width="80">
               <template #cell="{ record }">
-                <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
-                  {{ record.status === 'published' ? '已发布' : '草稿' }}
+                <a-tag :color="record.isPublished === 1 ? 'green' : 'orange'">
+                  {{ record.isPublished === 1 ? '已发布' : '草稿' }}
                 </a-tag>
               </template>
             </a-table-column>
@@ -90,8 +89,11 @@
         <a-form-item label="版本">
           <a-input v-model="form.version" placeholder="请输入版本号" />
         </a-form-item>
-        <a-form-item label="仓库地址">
-          <a-input v-model="form.repoUrl" placeholder="请输入仓库地址" />
+        <a-form-item label="Python仓库地址">
+          <a-input v-model="form.pythonUrl" placeholder="请输入Python仓库地址" />
+        </a-form-item>
+        <a-form-item label="C++仓库地址">
+          <a-input v-model="form.cppUrl" placeholder="请输入C++仓库地址" />
         </a-form-item>
         <a-form-item label="描述">
           <a-textarea v-model="form.description" placeholder="请输入描述" />
@@ -105,9 +107,9 @@
           </a-upload>
         </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="draft">草稿</a-option>
-            <a-option value="published">已发布</a-option>
+          <a-select v-model="form.isPublished">
+            <a-option :value="0">草稿</a-option>
+            <a-option :value="1">已发布</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -152,11 +154,11 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ title: '', category: '', version: '', repoUrl: '', description: '', content: '', coverImage: '', status: 'draft' });
+const form = reactive({ title: '', category: '', version: '', pythonUrl: '', cppUrl: '', description: '', content: '', coverImage: '', isPublished: 0 });
 const catForm = reactive({ name: '', description: '', sortOrder: 0 });
 
 function resetForm() {
-  Object.assign(form, { title: '', category: '', version: '', repoUrl: '', description: '', content: '', coverImage: '', status: 'draft' });
+  Object.assign(form, { title: '', category: '', version: '', pythonUrl: '', cppUrl: '', description: '', content: '', coverImage: '', isPublished: 0 });
   fileList.value = [];
 }
 function resetCatForm() {

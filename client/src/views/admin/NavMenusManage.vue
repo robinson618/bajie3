@@ -25,8 +25,8 @@
           <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
-              <a-tag :color="record.status === 'active' ? 'green' : 'red'">
-                {{ record.status === 'active' ? '启用' : '禁用' }}
+              <a-tag :color="record.isActive === 1 ? 'green' : 'red'">
+                {{ record.isActive === 1 ? '启用' : '禁用' }}
               </a-tag>
             </template>
           </a-table-column>
@@ -50,6 +50,15 @@
         <a-form-item label="链接">
           <a-input v-model="form.url" placeholder="请输入链接地址" />
         </a-form-item>
+        <a-form-item label="图标">
+          <a-input v-model="form.icon" placeholder="请输入图标类名" />
+        </a-form-item>
+        <a-form-item label="打开方式">
+          <a-select v-model="form.target">
+            <a-option value="_self">当前窗口</a-option>
+            <a-option value="_blank">新窗口</a-option>
+          </a-select>
+        </a-form-item>
         <a-form-item label="上级菜单">
           <a-select v-model="form.parentId" placeholder="无（顶级菜单）" allow-clear>
             <a-option v-for="m in topMenus" :key="m.id" :value="m.id">{{ m.title }}</a-option>
@@ -59,9 +68,9 @@
           <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="active">启用</a-option>
-            <a-option value="inactive">禁用</a-option>
+          <a-select v-model="form.isActive">
+            <a-option :value="1">启用</a-option>
+            <a-option :value="0">禁用</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -81,7 +90,7 @@ const modalVisible = ref(false);
 const isEdit = ref(false);
 const editId = ref(0);
 
-const form = reactive({ title: '', url: '', parentId: undefined as number | undefined, sortOrder: 0, status: 'active' });
+const form = reactive({ title: '', url: '', icon: '', parentId: undefined as number | undefined, target: '_self', sortOrder: 0, isActive: 1 });
 
 const treeData = computed(() => {
   const items = [...list.value];
@@ -105,7 +114,7 @@ function getParentName(parentId: number | undefined) {
 }
 
 function resetForm() {
-  Object.assign(form, { title: '', url: '', parentId: undefined, sortOrder: 0, status: 'active' });
+  Object.assign(form, { title: '', url: '', icon: '', parentId: undefined, target: '_self', sortOrder: 0, isActive: 1 });
 }
 
 async function fetchList() {

@@ -20,14 +20,14 @@
 
       <a-table :data="list" :pagination="pagination" :loading="loading" @page-change="onPageChange" row-key="id">
         <template #columns>
-          <a-table-column title="名称" data-index="name" :width="160" ellipsis />
+          <a-table-column title="名称" data-index="title" :width="160" ellipsis />
           <a-table-column title="分类" data-index="category" :width="100" />
-          <a-table-column title="开发者" data-index="developer" :width="100" />
-          <a-table-column title="点赞数" data-index="likeCount" :width="80" />
+          <a-table-column title="浏览量" data-index="views" :width="100" />
+          <a-table-column title="点赞数" data-index="likes" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
-              <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
-                {{ record.status === 'published' ? '已发布' : '草稿' }}
+              <a-tag :color="record.isPublished === 1 ? 'green' : 'orange'">
+                {{ record.isPublished === 1 ? '已发布' : '草稿' }}
               </a-tag>
             </template>
           </a-table-column>
@@ -45,8 +45,8 @@
 
     <a-modal v-model:visible="modalVisible" :title="isEdit ? '编辑应用' : '新增应用'" @ok="handleSubmit" :mask-closable="false" :width="600">
       <a-form :model="form" layout="vertical">
-        <a-form-item label="名称" required>
-          <a-input v-model="form.name" placeholder="请输入应用名称" />
+        <a-form-item label="标题" required>
+          <a-input v-model="form.title" placeholder="请输入应用标题" />
         </a-form-item>
         <a-form-item label="分类">
           <a-input v-model="form.category" placeholder="请输入分类" />
@@ -69,9 +69,9 @@
           </a-upload>
         </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="draft">草稿</a-option>
-            <a-option value="published">已发布</a-option>
+          <a-select v-model="form.isPublished">
+            <a-option :value="0">草稿</a-option>
+            <a-option :value="1">已发布</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -95,9 +95,9 @@ const fileList = ref<any[]>([]);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ name: '', category: '', developer: '', description: '', content: '', capabilities: [] as string[], coverImage: '', status: 'draft' });
+const form = reactive({ title: '', category: '', developer: '', description: '', content: '', capabilities: [] as string[], coverImage: '', isPublished: 0 });
 
-function resetForm() { Object.assign(form, { name: '', category: '', developer: '', description: '', content: '', capabilities: [], coverImage: '', status: 'draft' }); fileList.value = []; }
+function resetForm() { Object.assign(form, { title: '', category: '', developer: '', description: '', content: '', capabilities: [], coverImage: '', isPublished: 0 }); fileList.value = []; }
 
 async function fetchList() {
   loading.value = true;
@@ -121,7 +121,7 @@ function openModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.name) { Message.warning('请填写必填项'); return; }
+  if (!form.title) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await appsApi.update(editId.value, form) : await appsApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }

@@ -20,9 +20,9 @@
 
       <a-table :data="filteredList" :loading="loading" row-key="id" :pagination="false">
         <template #columns>
-          <a-table-column title="分组" data-index="section" :width="120">
+          <a-table-column title="分组" data-index="sectionTitle" :width="120">
             <template #cell="{ record }">
-              <a-tag>{{ record.section }}</a-tag>
+              <a-tag>{{ record.sectionTitle }}</a-tag>
             </template>
           </a-table-column>
           <a-table-column title="标题" data-index="title" :width="160" />
@@ -30,8 +30,8 @@
           <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
-              <a-tag :color="record.status === 'active' ? 'green' : 'red'">
-                {{ record.status === 'active' ? '启用' : '禁用' }}
+              <a-tag :color="record.isActive === 1 ? 'green' : 'red'">
+                {{ record.isActive === 1 ? '启用' : '禁用' }}
               </a-tag>
             </template>
           </a-table-column>
@@ -49,8 +49,8 @@
 
     <a-modal v-model:visible="modalVisible" :title="isEdit ? '编辑Footer项' : '新增Footer项'" @ok="handleSubmit" :mask-closable="false">
       <a-form :model="form" layout="vertical">
-        <a-form-item label="分组(section)" required>
-          <a-select v-model="form.section" placeholder="请选择或输入分组" allow-create>
+        <a-form-item label="分组标题" required>
+          <a-select v-model="form.sectionTitle" placeholder="请选择或输入分组标题" allow-create>
             <a-option v-for="s in sections" :key="s" :value="s">{{ s }}</a-option>
           </a-select>
         </a-form-item>
@@ -60,13 +60,16 @@
         <a-form-item label="链接">
           <a-input v-model="form.url" placeholder="请输入链接地址" />
         </a-form-item>
+        <a-form-item label="图标">
+          <a-input v-model="form.icon" placeholder="请输入图标类名" />
+        </a-form-item>
         <a-form-item label="排序">
           <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="active">启用</a-option>
-            <a-option value="inactive">禁用</a-option>
+          <a-select v-model="form.isActive">
+            <a-option :value="1">启用</a-option>
+            <a-option :value="0">禁用</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -87,21 +90,21 @@ const modalVisible = ref(false);
 const isEdit = ref(false);
 const editId = ref(0);
 
-const form = reactive({ section: '', title: '', url: '', sortOrder: 0, status: 'active' });
+const form = reactive({ sectionTitle: '', title: '', url: '', icon: '', sortOrder: 0, isActive: 1 });
 
 const sections = computed(() => {
   const set = new Set<string>();
-  list.value.forEach((item: any) => { if (item.section) set.add(item.section); });
+  list.value.forEach((item: any) => { if (item.sectionTitle) set.add(item.sectionTitle); });
   return Array.from(set);
 });
 
 const filteredList = computed(() => {
   if (!sectionFilter.value) return list.value;
-  return list.value.filter((item: any) => item.section === sectionFilter.value);
+  return list.value.filter((item: any) => item.sectionTitle === sectionFilter.value);
 });
 
 function resetForm() {
-  Object.assign(form, { section: '', title: '', url: '', sortOrder: 0, status: 'active' });
+  Object.assign(form, { sectionTitle: '', title: '', url: '', icon: '', sortOrder: 0, isActive: 1 });
 }
 
 async function fetchList() {
@@ -126,7 +129,7 @@ function openModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.section || !form.title) { Message.warning('请填写必填项'); return; }
+  if (!form.sectionTitle || !form.title) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await footerApi.update(editId.value, form) : await footerApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }

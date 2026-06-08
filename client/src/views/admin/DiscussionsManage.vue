@@ -16,8 +16,8 @@
         <template #columns>
           <a-table-column title="标题" data-index="title" :width="300" ellipsis />
           <a-table-column title="作者" data-index="author" :width="120" />
-          <a-table-column title="回复数" data-index="replyCount" :width="80" />
-          <a-table-column title="浏览量" data-index="viewCount" :width="80" />
+          <a-table-column title="评论数" data-index="comments" :width="80" />
+          <a-table-column title="浏览量" data-index="views" :width="80" />
           <a-table-column title="置顶" :width="80">
             <template #cell="{ record }">
               <a-switch :model-value="record.isPinned" @change="(val: any) => handleTogglePin(record, val)" />

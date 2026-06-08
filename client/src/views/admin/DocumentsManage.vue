@@ -31,7 +31,7 @@
           <a-table :data="list" :pagination="pagination" :loading="loading" @page-change="onPageChange" row-key="id">
             <template #columns>
               <a-table-column title="标题" data-index="title" :width="200" ellipsis />
-              <a-table-column title="分类" data-index="categoryName" :width="100" />
+              <a-table-column title="分类" data-index="category" :width="100" />
               <a-table-column title="作者" data-index="author" :width="100" />
               <a-table-column title="排序" data-index="sortOrder" :width="80" />
               <a-table-column title="操作" :width="160" fixed="right">
@@ -66,6 +66,12 @@
         </a-form-item>
         <a-form-item label="排序">
           <a-input-number v-model="form.sortOrder" :min="0" />
+        </a-form-item>
+        <a-form-item label="状态">
+          <a-select v-model="form.isPublished">
+            <a-option :value="0">草稿</a-option>
+            <a-option :value="1">已发布</a-option>
+          </a-select>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -112,7 +118,7 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ title: '', categoryId: undefined as number | undefined, author: '', content: '', sortOrder: 0 });
+const form = reactive({ title: '', categoryId: undefined as number | undefined, author: '', content: '', sortOrder: 0, isPublished: 0 });
 const catForm = reactive({ name: '', parentId: undefined as number | undefined, description: '', sortOrder: 0 });
 
 const categoryTree = computed(() => {
@@ -130,7 +136,7 @@ const categoryTree = computed(() => {
 
 const flatCategories = computed(() => categoryList.value.filter((c: any) => !c.parentId));
 
-function resetForm() { Object.assign(form, { title: '', categoryId: undefined, author: '', content: '', sortOrder: 0 }); }
+function resetForm() { Object.assign(form, { title: '', categoryId: undefined, author: '', content: '', sortOrder: 0, isPublished: 0 }); }
 function resetCatForm() { Object.assign(catForm, { name: '', parentId: undefined, description: '', sortOrder: 0 }); }
 
 async function fetchList() {

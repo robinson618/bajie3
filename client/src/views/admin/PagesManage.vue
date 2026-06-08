@@ -25,8 +25,8 @@
           <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
-              <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
-                {{ record.status === 'published' ? '已发布' : '草稿' }}
+              <a-tag :color="record.isPublished === 1 ? 'green' : 'orange'">
+                {{ record.isPublished === 1 ? '已发布' : '草稿' }}
               </a-tag>
             </template>
           </a-table-column>
@@ -50,16 +50,22 @@
         <a-form-item label="Slug" required>
           <a-input v-model="form.slug" placeholder="请输入URL标识（如 about-us）" />
         </a-form-item>
+        <a-form-item label="描述">
+          <a-textarea v-model="form.description" placeholder="请输入页面描述" />
+        </a-form-item>
         <a-form-item label="内容">
           <a-textarea v-model="form.content" placeholder="请输入页面内容" :auto-size="{ minRows: 8 }" />
         </a-form-item>
         <a-form-item label="排序">
           <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
+        <a-form-item label="显示Banner">
+          <a-switch v-model="form.showBanner" :checked-value="1" :unchecked-value="0" />
+        </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="draft">草稿</a-option>
-            <a-option value="published">已发布</a-option>
+          <a-select v-model="form.isPublished">
+            <a-option :value="0">草稿</a-option>
+            <a-option :value="1">已发布</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -82,10 +88,10 @@ const editId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ title: '', slug: '', content: '', sortOrder: 0, status: 'draft' });
+const form = reactive({ title: '', slug: '', description: '', content: '', coverImage: '', showBanner: 0, sortOrder: 0, isPublished: 0 });
 
 function resetForm() {
-  Object.assign(form, { title: '', slug: '', content: '', sortOrder: 0, status: 'draft' });
+  Object.assign(form, { title: '', slug: '', description: '', content: '', coverImage: '', showBanner: 0, sortOrder: 0, isPublished: 0 });
 }
 
 async function fetchList() {

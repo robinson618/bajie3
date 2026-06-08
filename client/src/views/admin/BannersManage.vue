@@ -17,17 +17,17 @@
         <template #columns>
           <a-table-column title="预览" :width="120">
             <template #cell="{ record }">
-              <a-image v-if="record.imageUrl" :src="record.imageUrl" width="100" height="50" fit="cover" />
+              <a-image v-if="record.image" :src="record.image" width="100" height="50" fit="cover" />
               <span v-else>-</span>
             </template>
           </a-table-column>
           <a-table-column title="标题" data-index="title" :width="160" ellipsis />
-          <a-table-column title="链接" data-index="linkUrl" :width="200" ellipsis />
+          <a-table-column title="链接" data-index="link" :width="200" ellipsis />
           <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
-              <a-tag :color="record.status === 'active' ? 'green' : 'red'">
-                {{ record.status === 'active' ? '启用' : '禁用' }}
+              <a-tag :color="record.isActive === 1 ? 'green' : 'red'">
+                {{ record.isActive === 1 ? '启用' : '禁用' }}
               </a-tag>
             </template>
           </a-table-column>
@@ -48,8 +48,11 @@
         <a-form-item label="标题" required>
           <a-input v-model="form.title" placeholder="请输入标题" />
         </a-form-item>
+        <a-form-item label="副标题">
+          <a-input v-model="form.subtitle" placeholder="请输入副标题" />
+        </a-form-item>
         <a-form-item label="链接">
-          <a-input v-model="form.linkUrl" placeholder="请输入跳转链接" />
+          <a-input v-model="form.link" placeholder="请输入跳转链接" />
         </a-form-item>
         <a-form-item label="图片" required>
           <a-upload :limit="1" list-type="picture-card" :custom-request="handleUpload" :file-list="fileList" @change="onFileChange" accept="image/*">
@@ -60,9 +63,9 @@
           <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
-          <a-select v-model="form.status">
-            <a-option value="active">启用</a-option>
-            <a-option value="inactive">禁用</a-option>
+          <a-select v-model="form.isActive">
+            <a-option :value="1">启用</a-option>
+            <a-option :value="0">禁用</a-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -83,10 +86,10 @@ const isEdit = ref(false);
 const editId = ref(0);
 const fileList = ref<any[]>([]);
 
-const form = reactive({ title: '', linkUrl: '', imageUrl: '', sortOrder: 0, status: 'active' });
+const form = reactive({ title: '', link: '', image: '', subtitle: '', sortOrder: 0, isActive: 1 });
 
 function resetForm() {
-  Object.assign(form, { title: '', linkUrl: '', imageUrl: '', sortOrder: 0, status: 'active' });
+  Object.assign(form, { title: '', link: '', image: '', subtitle: '', sortOrder: 0, isActive: 1 });
   fileList.value = [];
 }
 
@@ -105,7 +108,7 @@ function openModal(record?: any) {
     isEdit.value = true;
     editId.value = record.id;
     Object.assign(form, record);
-    if (record.imageUrl) fileList.value = [{ uid: '-1', name: 'image', url: record.imageUrl }];
+    if (record.image) fileList.value = [{ uid: '-1', name: 'image', url: record.image }];
   } else {
     isEdit.value = false;
   }
@@ -113,7 +116,7 @@ function openModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.title || !form.imageUrl) { Message.warning('请填写必填项'); return; }
+  if (!form.title || !form.image) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await bannersApi.update(editId.value, form) : await bannersApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }
@@ -131,7 +134,7 @@ async function handleDelete(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form.imageUrl = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.image = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
   return { abort: () => {} };
