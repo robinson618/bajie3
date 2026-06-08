@@ -1,0 +1,20 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+*.sqlite
+*.sqlite3
+*.db
+uploads/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.log
+npm-debug.log*
+mysql_data/
+EOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-4d1fbf32d9cc49259aabe704783791bd/cwd.txt'; exit "$__tr_native_ec"
