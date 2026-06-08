@@ -257,9 +257,10 @@ onMounted(async () => {
   fetchComments()
 
   try {
-    const trendRes: any = await discussionsApi.getHotTopics()
+    const trendRes: any = await discussionsApi.getList(1, 5)
     if (trendRes.success) {
-      hotTopics.value = trendRes.data || []
+      const items = trendRes.data?.items || []
+      hotTopics.value = items.sort((a: any, b: any) => (b.commentCount || 0) - (a.commentCount || 0)).slice(0, 5)
     }
   } catch (e) {
     console.error('加载热门话题失败:', e)

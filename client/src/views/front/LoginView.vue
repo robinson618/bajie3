@@ -91,12 +91,12 @@ async function handleLogin() {
   try {
     const res: any = await userStore.login(form.value.email, form.value.password);
     if (res.success) {
-      router.push('/');
+      await router.replace('/');
     } else {
       alert(res.message || '登录失败');
     }
-  } catch {
-    alert('登录失败，请稍后重试');
+  } catch (e: any) {
+    alert(e?.message || '登录失败，请稍后重试');
   } finally {
     loading.value = false;
   }

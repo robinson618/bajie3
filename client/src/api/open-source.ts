@@ -12,13 +12,13 @@ export const openSourceApi = {
   remove: (id: number) =>
     request.delete(`/admin/open-source/${id}`),
   getCategories: () =>
-    request.get('/open-source-categories'),
+    request.get('/open-source/categories'),
   createCategory: (data: any) =>
-    request.post('/admin/open-source-categories', data),
+    request.post('/admin/open-source/categories', data),
   updateCategory: (id: number, data: any) =>
-    request.put(`/admin/open-source-categories/${id}`, data),
+    request.put(`/admin/open-source/categories/${id}`, data),
   removeCategory: (id: number) =>
-    request.delete(`/admin/open-source-categories/${id}`),
+    request.delete(`/admin/open-source/categories/${id}`),
   getProjects: () =>
     request.get('/open-source'),
 };

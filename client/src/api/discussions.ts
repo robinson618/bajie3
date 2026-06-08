@@ -13,10 +13,6 @@ export const discussionsApi = {
     request.delete(`/admin/discussions/${id}`),
   togglePin: (id: number, pinned: boolean) =>
     request.put(`/admin/discussions/${id}`, { isPinned: pinned }),
-  getHotTopics: () =>
-    request.get('/discussions/hot'),
-  getActiveUsers: () =>
-    request.get('/discussions/active-users'),
   getComments: (id: number) =>
     request.get(`/discussions/${id}/comments`),
   postComment: (id: number, data: any) =>

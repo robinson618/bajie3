@@ -12,13 +12,13 @@ export const documentsApi = {
   remove: (id: number) =>
     request.delete(`/admin/documents/${id}`),
   getCategories: () =>
-    request.get('/document-categories'),
+    request.get('/doc-categories'),
   createCategory: (data: any) =>
-    request.post('/admin/document-categories', data),
+    request.post('/admin/doc-categories', data),
   updateCategory: (id: number, data: any) =>
-    request.put(`/admin/document-categories/${id}`, data),
+    request.put(`/admin/doc-categories/${id}`, data),
   removeCategory: (id: number) =>
-    request.delete(`/admin/document-categories/${id}`),
+    request.delete(`/admin/doc-categories/${id}`),
   getSubcategories: () =>
     request.get('/doc-subcategories'),
   getCategoryDetail: (id: number) =>

@@ -10,7 +10,7 @@ export const faqApi = {
   remove: (id: number) =>
     request.delete(`/admin/faq/${id}`),
   getCategories: () =>
-    request.get('/faq-categories'),
+    request.get('/faq/categories'),
   createCategory: (data: any) =>
     request.post('/admin/faq-categories', data),
   updateCategory: (id: number, data: any) =>

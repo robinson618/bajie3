@@ -206,6 +206,8 @@ async function fetchDiscussions() {
       discussions.value = res.data?.items || []
       total.value = res.data?.total || discussions.value.length
       totalPages.value = Math.ceil(total.value / pageSize) || 1
+      extractHotTopics()
+      extractActiveUsers()
     }
   } catch (e) {
     console.error('加载讨论列表失败:', e)
@@ -214,26 +216,31 @@ async function fetchDiscussions() {
   }
 }
 
-async function fetchHotTopics() {
-  try {
-    const res: any = await discussionsApi.getHotTopics()
-    if (res.success) {
-      hotTopics.value = res.data || []
-    }
-  } catch (e) {
-    console.error('加载热门话题失败:', e)
-  }
+function extractHotTopics() {
+  // 按评论数排序取前5个作为热门话题
+  const sorted = [...discussions.value].sort((a: any, b: any) => (b.commentCount || 0) - (a.commentCount || 0))
+  hotTopics.value = sorted.slice(0, 5)
 }
 
-async function fetchActiveUsers() {
-  try {
-    const res: any = await discussionsApi.getActiveUsers()
-    if (res.success) {
-      activeUsers.value = res.data || []
+function extractActiveUsers() {
+  // 从讨论列表中提取去重的活跃用户，按发布数排序
+  const userMap = new Map<number, any>()
+  discussions.value.forEach((item: any) => {
+    if (item.authorId && !userMap.has(item.authorId)) {
+      userMap.set(item.authorId, {
+        id: item.authorId,
+        username: item.author || '匿名',
+        avatar: item.authorAvatar || '',
+        postCount: 1,
+      })
+    } else if (item.authorId) {
+      const user = userMap.get(item.authorId)
+      if (user) user.postCount++
     }
-  } catch (e) {
-    console.error('加载活跃用户失败:', e)
-  }
+  })
+  activeUsers.value = Array.from(userMap.values())
+    .sort((a: any, b: any) => b.postCount - a.postCount)
+    .slice(0, 5)
 }
 
 watch(activeCategory, () => {
@@ -247,7 +254,5 @@ watch(currentPage, () => {
 
 onMounted(() => {
   fetchDiscussions()
-  fetchHotTopics()
-  fetchActiveUsers()
 })
 </script>
