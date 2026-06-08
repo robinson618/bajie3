@@ -57,7 +57,7 @@
                   <span class="text-xs font-medium text-gray-700">技术规格</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5">
-                  <span v-for="spec in parseList(skill.tech_specs)" :key="spec" class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">{{ spec }}</span>
+                  <span v-for="spec in parseList(skill.techSpecs)" :key="spec" class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">{{ spec }}</span>
                 </div>
               </div>
 
@@ -68,13 +68,13 @@
                   <span class="text-xs font-medium text-gray-700">支持设备</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5">
-                  <span v-for="device in parseList(skill.supported_devices)" :key="device" class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded">{{ device }}</span>
+                  <span v-for="device in parseList(skill.supportedDevices)" :key="device" class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded">{{ device }}</span>
                 </div>
               </div>
 
               <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-                <span :class="['text-xs px-2.5 py-1 rounded', skill.is_paid ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600']">
-                  {{ skill.is_paid ? '付费' : '免费' }}
+                <span :class="['text-xs px-2.5 py-1 rounded', skill.isPaid ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600']">
+                  {{ skill.isPaid ? '付费' : '免费' }}
                 </span>
                 <div class="flex items-center gap-3 text-sm text-[rgb(149,156,166)]">
                   <span><i class="fa fa-download mr-1"></i>{{ skill.downloads || 0 }}</span>
@@ -161,7 +161,7 @@ async function fetchSkills() {
     const cat = activeCategory.value === '全部' ? undefined : activeCategory.value
     const res: any = await skillsApi.getList(currentPage.value, pageSize, cat)
     if (res.success) {
-      skillsList.value = res.data?.list || res.data || []
+      skillsList.value = res.data?.items || []
       total.value = res.data?.total || skillsList.value.length
       totalPages.value = Math.ceil(total.value / pageSize) || 1
     }

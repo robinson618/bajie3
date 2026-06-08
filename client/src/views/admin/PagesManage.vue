@@ -22,7 +22,7 @@
         <template #columns>
           <a-table-column title="标题" data-index="title" :width="200" ellipsis />
           <a-table-column title="Slug" data-index="slug" :width="150" />
-          <a-table-column title="排序" data-index="sort_order" :width="80" />
+          <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
               <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
@@ -54,7 +54,7 @@
           <a-textarea v-model="form.content" placeholder="请输入页面内容" :auto-size="{ minRows: 8 }" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="form.sort_order" :min="0" />
+          <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
           <a-select v-model="form.status">
@@ -82,10 +82,10 @@ const editId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ title: '', slug: '', content: '', sort_order: 0, status: 'draft' });
+const form = reactive({ title: '', slug: '', content: '', sortOrder: 0, status: 'draft' });
 
 function resetForm() {
-  Object.assign(form, { title: '', slug: '', content: '', sort_order: 0, status: 'draft' });
+  Object.assign(form, { title: '', slug: '', content: '', sortOrder: 0, status: 'draft' });
 }
 
 async function fetchList() {
@@ -93,7 +93,7 @@ async function fetchList() {
   try {
     const res: any = await pagesApi.getList(pagination.current, pagination.pageSize);
     if (res.success) {
-      list.value = res.data?.list || res.data?.items || [];
+      list.value = res.data?.items || [];
       pagination.total = res.data?.total || 0;
     }
   } catch { Message.error('获取列表失败'); }

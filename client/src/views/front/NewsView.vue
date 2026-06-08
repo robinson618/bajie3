@@ -45,7 +45,7 @@
           >
             <div class="aspect-[21/9] bg-gradient-to-br from-blue-100 to-blue-200 relative overflow-hidden">
               <img
-                :src="item.cover_image || 'https://picsum.photos/400/200'"
+                :src="item.coverImage || 'https://picsum.photos/400/200'"
                 :alt="item.title"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
@@ -54,7 +54,7 @@
               <h4 class="font-semibold mb-2 line-clamp-1 group-hover:text-[#1E50A0] transition-colors">{{ item.title }}</h4>
               <p class="text-sm text-[#64748B] mb-3 line-clamp-2">{{ item.summary || item.content || '精彩内容，点击查看详情' }}</p>
               <div class="flex items-center justify-between text-xs text-gray-400">
-                <span>{{ formatDate(item.created_at) }}</span>
+                <span>{{ formatDate(item.createdAt) }}</span>
                 <span><i class="fa fa-eye mr-1"></i>{{ formatViews(item.views || 0) }}</span>
               </div>
             </div>
@@ -132,7 +132,7 @@ async function fetchNews() {
     const cat = activeCategory.value === '全部' ? undefined : activeCategory.value
     const res: any = await newsApi.getList(currentPage.value, pageSize, cat)
     if (res.success) {
-      newsList.value = res.data?.list || res.data || []
+      newsList.value = res.data?.items || []
       total.value = res.data?.total || newsList.value.length
       totalPages.value = Math.ceil(total.value / pageSize) || 1
     }

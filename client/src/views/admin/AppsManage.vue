@@ -23,7 +23,7 @@
           <a-table-column title="名称" data-index="name" :width="160" ellipsis />
           <a-table-column title="分类" data-index="category" :width="100" />
           <a-table-column title="开发者" data-index="developer" :width="100" />
-          <a-table-column title="点赞数" data-index="like_count" :width="80" />
+          <a-table-column title="点赞数" data-index="likeCount" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
               <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
@@ -95,15 +95,15 @@ const fileList = ref<any[]>([]);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ name: '', category: '', developer: '', description: '', content: '', capabilities: [] as string[], cover_image: '', status: 'draft' });
+const form = reactive({ name: '', category: '', developer: '', description: '', content: '', capabilities: [] as string[], coverImage: '', status: 'draft' });
 
-function resetForm() { Object.assign(form, { name: '', category: '', developer: '', description: '', content: '', capabilities: [], cover_image: '', status: 'draft' }); fileList.value = []; }
+function resetForm() { Object.assign(form, { name: '', category: '', developer: '', description: '', content: '', capabilities: [], coverImage: '', status: 'draft' }); fileList.value = []; }
 
 async function fetchList() {
   loading.value = true;
   try {
     const res: any = await appsApi.getList(pagination.current, pagination.pageSize);
-    if (res.success) { list.value = res.data?.list || res.data?.items || []; pagination.total = res.data?.total || 0; }
+    if (res.success) { list.value = res.data?.items || []; pagination.total = res.data?.total || 0; }
   } catch { Message.error('获取列表失败'); }
   finally { loading.value = false; }
 }
@@ -115,7 +115,7 @@ function openModal(record?: any) {
   if (record) {
     isEdit.value = true; editId.value = record.id;
     Object.assign(form, { ...record, capabilities: record.capabilities || [] });
-    if (record.cover_image) fileList.value = [{ uid: '-1', name: 'cover', url: record.cover_image }];
+    if (record.coverImage) fileList.value = [{ uid: '-1', name: 'cover', url: record.coverImage }];
   } else { isEdit.value = false; }
   modalVisible.value = true;
 }
@@ -136,7 +136,7 @@ async function handleDelete(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form.cover_image = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.coverImage = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
 }

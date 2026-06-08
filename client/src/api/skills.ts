@@ -2,7 +2,7 @@ import request from './request';
 
 export const skillsApi = {
   getList: (page = 1, pageSize = 10, skillCategory?: string) =>
-    request.get('/skills', { params: { page, pageSize, skill_category: skillCategory } }),
+    request.get('/skills', { params: { page, pageSize, skillCategory } }),
   getDetail: (id: number) =>
     request.get(`/skills/${id}`),
   getCategories: () =>

@@ -34,7 +34,7 @@
             <a-table-column title="标题" data-index="title" :width="200" ellipsis />
             <a-table-column title="版本" data-index="version" :width="80" />
             <a-table-column title="分类" data-index="category" :width="100" />
-            <a-table-column title="星标数" data-index="star_count" :width="80" />
+            <a-table-column title="星标数" data-index="starCount" :width="80" />
             <a-table-column title="状态" :width="80">
               <template #cell="{ record }">
                 <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
@@ -63,7 +63,7 @@
           <template #columns>
             <a-table-column title="分类名称" data-index="name" />
             <a-table-column title="描述" data-index="description" />
-            <a-table-column title="排序" data-index="sort_order" :width="80" />
+            <a-table-column title="排序" data-index="sortOrder" :width="80" />
             <a-table-column title="操作" :width="160">
               <template #cell="{ record }">
                 <a-button type="text" size="small" @click="openCategoryModal(record)">编辑</a-button>
@@ -91,7 +91,7 @@
           <a-input v-model="form.version" placeholder="请输入版本号" />
         </a-form-item>
         <a-form-item label="仓库地址">
-          <a-input v-model="form.repo_url" placeholder="请输入仓库地址" />
+          <a-input v-model="form.repoUrl" placeholder="请输入仓库地址" />
         </a-form-item>
         <a-form-item label="描述">
           <a-textarea v-model="form.description" placeholder="请输入描述" />
@@ -122,7 +122,7 @@
           <a-textarea v-model="catForm.description" placeholder="请输入描述" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="catForm.sort_order" :min="0" />
+          <a-input-number v-model="catForm.sortOrder" :min="0" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -152,15 +152,15 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ title: '', category: '', version: '', repo_url: '', description: '', content: '', cover_image: '', status: 'draft' });
-const catForm = reactive({ name: '', description: '', sort_order: 0 });
+const form = reactive({ title: '', category: '', version: '', repoUrl: '', description: '', content: '', coverImage: '', status: 'draft' });
+const catForm = reactive({ name: '', description: '', sortOrder: 0 });
 
 function resetForm() {
-  Object.assign(form, { title: '', category: '', version: '', repo_url: '', description: '', content: '', cover_image: '', status: 'draft' });
+  Object.assign(form, { title: '', category: '', version: '', repoUrl: '', description: '', content: '', coverImage: '', status: 'draft' });
   fileList.value = [];
 }
 function resetCatForm() {
-  Object.assign(catForm, { name: '', description: '', sort_order: 0 });
+  Object.assign(catForm, { name: '', description: '', sortOrder: 0 });
 }
 
 async function fetchList() {
@@ -168,7 +168,7 @@ async function fetchList() {
   try {
     const res: any = await openSourceApi.getList(pagination.current, pagination.pageSize, osCategory.value || undefined);
     if (res.success) {
-      list.value = res.data?.list || res.data?.items || [];
+      list.value = res.data?.items || [];
       pagination.total = res.data?.total || 0;
     }
   } catch { Message.error('获取列表失败'); }
@@ -179,7 +179,7 @@ async function fetchCategories() {
   catLoading.value = true;
   try {
     const res: any = await openSourceApi.getCategories();
-    if (res.success) categoryList.value = res.data?.list || res.data?.items || res.data || [];
+    if (res.success) categoryList.value = res.data?.items || res.data || [];
   } catch { Message.error('获取分类失败'); }
   finally { catLoading.value = false; }
 }
@@ -195,7 +195,7 @@ function openModal(record?: any) {
     isEdit.value = true;
     editId.value = record.id;
     Object.assign(form, record);
-    if (record.cover_image) fileList.value = [{ uid: '-1', name: 'cover', url: record.cover_image }];
+    if (record.coverImage) fileList.value = [{ uid: '-1', name: 'cover', url: record.coverImage }];
   } else {
     isEdit.value = false;
   }
@@ -250,7 +250,7 @@ async function handleDeleteCategory(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form.cover_image = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.coverImage = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
 }

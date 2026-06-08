@@ -24,7 +24,7 @@
               </a-tag>
             </template>
           </a-table-column>
-          <a-table-column title="创建时间" data-index="created_at" :width="180" />
+          <a-table-column title="创建时间" data-index="createdAt" :width="180" />
           <a-table-column title="操作" :width="200" fixed="right">
             <template #cell="{ record }">
               <a-button type="text" size="small" @click="openEditModal(record)">编辑</a-button>
@@ -91,7 +91,7 @@ async function fetchList() {
   try {
     const res: any = await usersApi.getList(pagination.current, pagination.pageSize, keyword.value || undefined);
     if (res.success) {
-      list.value = res.data?.list || res.data?.items || [];
+      list.value = res.data?.items || [];
       pagination.total = res.data?.total || 0;
     }
   } catch { Message.error('获取列表失败'); }

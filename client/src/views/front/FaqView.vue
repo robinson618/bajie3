@@ -107,7 +107,7 @@ async function fetchCategories() {
     const res: any = await faqApi.getCategories()
     if (res.success) {
       const cats = (res.data || [])
-        .filter((c: any) => c.is_active)
+        .filter((c: any) => c.isActive)
         .map((c: any) => c.name)
       categoryList.value = ['全部', ...cats]
     }

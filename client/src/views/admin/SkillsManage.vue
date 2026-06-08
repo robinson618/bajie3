@@ -32,10 +32,10 @@
         <a-table :data="list" :pagination="pagination" :loading="loading" @page-change="onPageChange" row-key="id">
           <template #columns>
             <a-table-column title="名称" data-index="name" :width="160" ellipsis />
-            <a-table-column title="分类" data-index="skill_category" :width="100" />
+            <a-table-column title="分类" data-index="skillCategory" :width="100" />
             <a-table-column title="版本" data-index="version" :width="80" />
-            <a-table-column title="下载量" data-index="download_count" :width="80" />
-            <a-table-column title="浏览量" data-index="view_count" :width="80" />
+            <a-table-column title="下载量" data-index="downloadCount" :width="80" />
+            <a-table-column title="浏览量" data-index="viewCount" :width="80" />
             <a-table-column title="状态" :width="80">
               <template #cell="{ record }">
                 <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
@@ -64,7 +64,7 @@
           <template #columns>
             <a-table-column title="分类名称" data-index="name" />
             <a-table-column title="描述" data-index="description" />
-            <a-table-column title="排序" data-index="sort_order" :width="80" />
+            <a-table-column title="排序" data-index="sortOrder" :width="80" />
             <a-table-column title="操作" :width="160">
               <template #cell="{ record }">
                 <a-button type="text" size="small" @click="openCategoryModal(record)">编辑</a-button>
@@ -84,7 +84,7 @@
           <a-input v-model="form.name" placeholder="请输入技能名称" />
         </a-form-item>
         <a-form-item label="分类" required>
-          <a-select v-model="form.skill_category" placeholder="请选择分类" allow-create>
+          <a-select v-model="form.skillCategory" placeholder="请选择分类" allow-create>
             <a-option v-for="c in categoryList" :key="c.id" :value="c.name">{{ c.name }}</a-option>
           </a-select>
         </a-form-item>
@@ -120,7 +120,7 @@
           <a-textarea v-model="catForm.description" placeholder="请输入描述" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="catForm.sort_order" :min="0" />
+          <a-input-number v-model="catForm.sortOrder" :min="0" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -150,17 +150,17 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ name: '', skill_category: '', version: '', description: '', content: '', cover_image: '', status: 'draft' });
-const catForm = reactive({ name: '', description: '', sort_order: 0 });
+const form = reactive({ name: '', skillCategory: '', version: '', description: '', content: '', coverImage: '', status: 'draft' });
+const catForm = reactive({ name: '', description: '', sortOrder: 0 });
 
-function resetForm() { Object.assign(form, { name: '', skill_category: '', version: '', description: '', content: '', cover_image: '', status: 'draft' }); fileList.value = []; }
-function resetCatForm() { Object.assign(catForm, { name: '', description: '', sort_order: 0 }); }
+function resetForm() { Object.assign(form, { name: '', skillCategory: '', version: '', description: '', content: '', coverImage: '', status: 'draft' }); fileList.value = []; }
+function resetCatForm() { Object.assign(catForm, { name: '', description: '', sortOrder: 0 }); }
 
 async function fetchList() {
   loading.value = true;
   try {
     const res: any = await skillsApi.getList(pagination.current, pagination.pageSize, skillCategory.value || undefined);
-    if (res.success) { list.value = res.data?.list || res.data?.items || []; pagination.total = res.data?.total || 0; }
+    if (res.success) { list.value = res.data?.items || []; pagination.total = res.data?.total || 0; }
   } catch { Message.error('获取列表失败'); }
   finally { loading.value = false; }
 }
@@ -169,7 +169,7 @@ async function fetchCategories() {
   catLoading.value = true;
   try {
     const res: any = await skillsApi.getCategories();
-    if (res.success) categoryList.value = res.data?.list || res.data?.items || res.data || [];
+    if (res.success) categoryList.value = res.data?.items || res.data || [];
   } catch { Message.error('获取分类失败'); }
   finally { catLoading.value = false; }
 }
@@ -179,7 +179,7 @@ function onPageChange(page: number) { pagination.current = page; fetchList(); }
 
 function openModal(record?: any) {
   resetForm();
-  if (record) { isEdit.value = true; editId.value = record.id; Object.assign(form, record); if (record.cover_image) fileList.value = [{ uid: '-1', name: 'cover', url: record.cover_image }]; }
+  if (record) { isEdit.value = true; editId.value = record.id; Object.assign(form, record); if (record.coverImage) fileList.value = [{ uid: '-1', name: 'cover', url: record.coverImage }]; }
   else isEdit.value = false;
   modalVisible.value = true;
 }
@@ -192,7 +192,7 @@ function openCategoryModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.name || !form.skill_category) { Message.warning('请填写必填项'); return; }
+  if (!form.name || !form.skillCategory) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await skillsApi.update(editId.value, form) : await skillsApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }
@@ -221,7 +221,7 @@ async function handleDeleteCategory(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form.cover_image = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.coverImage = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
   return { abort: () => {} };

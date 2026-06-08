@@ -57,14 +57,14 @@
             </div>
 
             <div class="flex items-center gap-4 mb-6">
-              <span class="text-[#64748B] text-sm">发布于 {{ skill.created_at?.split('T')[0] || '' }}</span>
-              <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded">{{ skill.is_paid ? '付费' : '免费' }}</span>
+              <span class="text-[#64748B] text-sm">发布于 {{ skill.createdAt?.split('T')[0] || '' }}</span>
+              <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded">{{ skill.isPaid ? '付费' : '免费' }}</span>
             </div>
 
             <!-- 功能介绍 -->
             <div class="mb-6">
               <h4 class="font-semibold mb-2">功能介绍</h4>
-              <p class="text-[#64748B] text-sm leading-relaxed">{{ skill.feature_intro || '暂无功能介绍' }}</p>
+              <p class="text-[#64748B] text-sm leading-relaxed">{{ skill.featureIntro || '暂无功能介绍' }}</p>
             </div>
 
             <!-- 技术规格 -->
@@ -89,7 +89,7 @@
             </div>
 
             <!-- 下载按钮 -->
-            <div v-if="skill.document_url" class="mb-6">
+            <div v-if="skill.documentUrl" class="mb-6">
               <button @click="handleDownload" class="w-full py-3 bg-[#1E50A0] text-white rounded-lg hover:bg-[#174080] transition-colors flex items-center justify-center gap-2">
                 <i class="fa fa-download"></i> 下载Skill
               </button>
@@ -130,7 +130,7 @@ const iconWithColor = computed(() => {
 const iconTextColor = computed(() => gradientClasses[idx.value].textColor)
 
 const techSpecs = computed(() => {
-  const val = skill.value?.tech_specs
+  const val = skill.value?.techSpecs
   if (!val) return []
   if (Array.isArray(val)) return val
   if (typeof val === 'string') return val.split('\n').map((s: string) => s.trim()).filter(Boolean)
@@ -138,7 +138,7 @@ const techSpecs = computed(() => {
 })
 
 const supportedDevices = computed(() => {
-  const val = skill.value?.supported_devices
+  const val = skill.value?.supportedDevices
   if (!val) return []
   if (Array.isArray(val)) return val
   if (typeof val === 'string') return val.split(',').map((s: string) => s.trim()).filter(Boolean)
@@ -160,8 +160,8 @@ async function handleDownload() {
   } catch (e) {
     console.error('更新下载量失败:', e)
   } finally {
-    if (skill.value.document_url) {
-      window.open(skill.value.document_url, '_blank')
+    if (skill.value.documentUrl) {
+      window.open(skill.value.documentUrl, '_blank')
     }
   }
 }

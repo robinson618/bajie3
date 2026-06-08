@@ -12,7 +12,7 @@ export const discussionsApi = {
   remove: (id: number) =>
     request.delete(`/admin/discussions/${id}`),
   togglePin: (id: number, pinned: boolean) =>
-    request.put(`/admin/discussions/${id}`, { is_pinned: pinned }),
+    request.put(`/admin/discussions/${id}`, { isPinned: pinned }),
   getHotTopics: () =>
     request.get('/discussions/hot'),
   getActiveUsers: () =>

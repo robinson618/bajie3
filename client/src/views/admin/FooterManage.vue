@@ -27,7 +27,7 @@
           </a-table-column>
           <a-table-column title="标题" data-index="title" :width="160" />
           <a-table-column title="链接" data-index="url" :width="200" ellipsis />
-          <a-table-column title="排序" data-index="sort_order" :width="80" />
+          <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
               <a-tag :color="record.status === 'active' ? 'green' : 'red'">
@@ -61,7 +61,7 @@
           <a-input v-model="form.url" placeholder="请输入链接地址" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="form.sort_order" :min="0" />
+          <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
           <a-select v-model="form.status">
@@ -87,7 +87,7 @@ const modalVisible = ref(false);
 const isEdit = ref(false);
 const editId = ref(0);
 
-const form = reactive({ section: '', title: '', url: '', sort_order: 0, status: 'active' });
+const form = reactive({ section: '', title: '', url: '', sortOrder: 0, status: 'active' });
 
 const sections = computed(() => {
   const set = new Set<string>();
@@ -101,14 +101,14 @@ const filteredList = computed(() => {
 });
 
 function resetForm() {
-  Object.assign(form, { section: '', title: '', url: '', sort_order: 0, status: 'active' });
+  Object.assign(form, { section: '', title: '', url: '', sortOrder: 0, status: 'active' });
 }
 
 async function fetchList() {
   loading.value = true;
   try {
     const res: any = await footerApi.getList();
-    if (res.success) list.value = res.data?.list || res.data?.items || res.data || [];
+    if (res.success) list.value = res.data?.items || res.data || [];
   } catch { Message.error('获取列表失败'); }
   finally { loading.value = false; }
 }

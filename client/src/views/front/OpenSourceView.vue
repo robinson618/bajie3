@@ -66,8 +66,8 @@
                 <p class="text-[#64748B] text-sm mb-4">{{ project.description || '' }}</p>
                 <div class="flex items-center gap-2">
                   <a
-                    v-if="project.python_url"
-                    :href="project.python_url"
+                    v-if="project.pythonUrl"
+                    :href="project.pythonUrl"
                     target="_blank"
                     class="px-4 py-2 bg-blue-100 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-200 transition-colors inline-flex items-center gap-1"
                   >
@@ -79,8 +79,8 @@
                     </svg>
                   </a>
                   <a
-                    v-if="project.cpp_url"
-                    :href="project.cpp_url"
+                    v-if="project.cppUrl"
+                    :href="project.cppUrl"
                     target="_blank"
                     class="px-4 py-2 bg-gray-100 text-gray-600 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors inline-flex items-center gap-1"
                   >
@@ -122,7 +122,7 @@ async function fetchCategories() {
   try {
     const res: any = await openSourceApi.getCategories()
     if (res.success) {
-      categories.value = (res.data || []).filter((c: any) => c.is_active)
+      categories.value = (res.data || []).filter((c: any) => c.isActive)
     }
   } catch (e) {
     console.error('加载分类失败:', e)

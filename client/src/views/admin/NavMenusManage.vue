@@ -19,10 +19,10 @@
           <a-table-column title="链接" data-index="url" :width="200" ellipsis />
           <a-table-column title="上级菜单" :width="120">
             <template #cell="{ record }">
-              {{ getParentName(record.parent_id) }}
+              {{ getParentName(record.parentId) }}
             </template>
           </a-table-column>
-          <a-table-column title="排序" data-index="sort_order" :width="80" />
+          <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
               <a-tag :color="record.status === 'active' ? 'green' : 'red'">
@@ -51,12 +51,12 @@
           <a-input v-model="form.url" placeholder="请输入链接地址" />
         </a-form-item>
         <a-form-item label="上级菜单">
-          <a-select v-model="form.parent_id" placeholder="无（顶级菜单）" allow-clear>
+          <a-select v-model="form.parentId" placeholder="无（顶级菜单）" allow-clear>
             <a-option v-for="m in topMenus" :key="m.id" :value="m.id">{{ m.title }}</a-option>
           </a-select>
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="form.sort_order" :min="0" />
+          <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
           <a-select v-model="form.status">
@@ -81,7 +81,7 @@ const modalVisible = ref(false);
 const isEdit = ref(false);
 const editId = ref(0);
 
-const form = reactive({ title: '', url: '', parent_id: undefined as number | undefined, sort_order: 0, status: 'active' });
+const form = reactive({ title: '', url: '', parentId: undefined as number | undefined, sortOrder: 0, status: 'active' });
 
 const treeData = computed(() => {
   const items = [...list.value];
@@ -90,13 +90,13 @@ const treeData = computed(() => {
   items.forEach((item: any) => { map.set(item.id, { ...item, children: [] }); });
   items.forEach((item: any) => {
     const node = map.get(item.id);
-    if (item.parent_id && map.has(item.parent_id)) map.get(item.parent_id).children.push(node);
+    if (item.parentId && map.has(item.parentId)) map.get(item.parentId).children.push(node);
     else roots.push(node);
   });
   return roots;
 });
 
-const topMenus = computed(() => list.value.filter((m: any) => !m.parent_id));
+const topMenus = computed(() => list.value.filter((m: any) => !m.parentId));
 
 function getParentName(parentId: number | undefined) {
   if (!parentId) return '-';
@@ -105,14 +105,14 @@ function getParentName(parentId: number | undefined) {
 }
 
 function resetForm() {
-  Object.assign(form, { title: '', url: '', parent_id: undefined, sort_order: 0, status: 'active' });
+  Object.assign(form, { title: '', url: '', parentId: undefined, sortOrder: 0, status: 'active' });
 }
 
 async function fetchList() {
   loading.value = true;
   try {
     const res: any = await navMenusApi.getList();
-    if (res.success) list.value = res.data?.list || res.data?.items || res.data || [];
+    if (res.success) list.value = res.data?.items || res.data || [];
   } catch { Message.error('获取列表失败'); }
   finally { loading.value = false; }
 }

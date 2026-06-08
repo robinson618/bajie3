@@ -199,7 +199,7 @@ onMounted(async () => {
     if (catRes.success && subRes.success) {
       categories.value = (catRes.data || []).map((cat: any) => ({
         ...cat,
-        subcategories: (subRes.data || []).filter((sub: any) => sub.category_id === cat.id),
+        subcategories: (subRes.data || []).filter((sub: any) => sub.categoryId === cat.id),
       }))
 
       // 自动展开第一个分类

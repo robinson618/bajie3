@@ -16,11 +16,11 @@
         <template #columns>
           <a-table-column title="标题" data-index="title" :width="300" ellipsis />
           <a-table-column title="作者" data-index="author" :width="120" />
-          <a-table-column title="回复数" data-index="reply_count" :width="80" />
-          <a-table-column title="浏览量" data-index="view_count" :width="80" />
+          <a-table-column title="回复数" data-index="replyCount" :width="80" />
+          <a-table-column title="浏览量" data-index="viewCount" :width="80" />
           <a-table-column title="置顶" :width="80">
             <template #cell="{ record }">
-              <a-switch :model-value="record.is_pinned" @change="(val: any) => handleTogglePin(record, val)" />
+              <a-switch :model-value="record.isPinned" @change="(val: any) => handleTogglePin(record, val)" />
             </template>
           </a-table-column>
           <a-table-column title="操作" :width="100" fixed="right">
@@ -52,7 +52,7 @@ async function fetchList() {
   loading.value = true;
   try {
     const res: any = await discussionsApi.getList(pagination.current, pagination.pageSize, keyword.value || undefined);
-    if (res.success) { list.value = res.data?.list || res.data?.items || []; pagination.total = res.data?.total || 0; }
+    if (res.success) { list.value = res.data?.items || []; pagination.total = res.data?.total || 0; }
   } catch { Message.error('获取列表失败'); }
   finally { loading.value = false; }
 }

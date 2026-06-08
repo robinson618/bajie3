@@ -28,7 +28,7 @@
           <a-table-column title="标题" data-index="title" :width="240" ellipsis />
           <a-table-column title="分类" data-index="category" :width="100" />
           <a-table-column title="作者" data-index="author" :width="100" />
-          <a-table-column title="浏览量" data-index="view_count" :width="80" />
+          <a-table-column title="浏览量" data-index="viewCount" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
               <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
@@ -102,11 +102,11 @@ const fileList = ref<any[]>([]);
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
 const form = reactive({
-  title: '', category: '', author: '', summary: '', content: '', cover_image: '', status: 'draft',
+  title: '', category: '', author: '', summary: '', content: '', coverImage: '', status: 'draft',
 });
 
 function resetForm() {
-  Object.assign(form, { title: '', category: '', author: '', summary: '', content: '', cover_image: '', status: 'draft' });
+  Object.assign(form, { title: '', category: '', author: '', summary: '', content: '', coverImage: '', status: 'draft' });
   fileList.value = [];
 }
 
@@ -115,7 +115,7 @@ async function fetchList() {
   try {
     const res: any = await newsApi.getList(pagination.current, pagination.pageSize, category.value || undefined);
     if (res.success) {
-      list.value = res.data?.list || res.data?.items || [];
+      list.value = res.data?.items || [];
       pagination.total = res.data?.total || 0;
     }
   } catch { Message.error('获取列表失败'); }
@@ -132,8 +132,8 @@ function openModal(record?: any) {
   if (record) {
     isEdit.value = true;
     editId.value = record.id;
-    Object.assign(form, { title: record.title, category: record.category, author: record.author, summary: record.summary, content: record.content, cover_image: record.cover_image, status: record.status });
-    if (record.cover_image) fileList.value = [{ uid: '-1', name: 'cover', url: record.cover_image }];
+    Object.assign(form, { title: record.title, category: record.category, author: record.author, summary: record.summary, content: record.content, coverImage: record.coverImage, status: record.status });
+    if (record.coverImage) fileList.value = [{ uid: '-1', name: 'cover', url: record.coverImage }];
   } else {
     isEdit.value = false;
   }
@@ -159,7 +159,7 @@ async function handleDelete(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form.cover_image = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.coverImage = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
 }

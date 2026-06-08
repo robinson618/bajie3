@@ -15,13 +15,13 @@
 
       <a-table :data="list" :pagination="pagination" :loading="loading" @page-change="onPageChange" row-key="id">
         <template #columns>
-          <a-table-column title="页面" data-index="page_slug" :width="120" />
-          <a-table-column title="Meta标题" data-index="meta_title" :width="200" ellipsis />
-          <a-table-column title="Meta描述" data-index="meta_description" :width="240" ellipsis />
+          <a-table-column title="页面" data-index="pageSlug" :width="120" />
+          <a-table-column title="Meta标题" data-index="metaTitle" :width="200" ellipsis />
+          <a-table-column title="Meta描述" data-index="metaDescription" :width="240" ellipsis />
           <a-table-column title="关键词" :width="200">
             <template #cell="{ record }">
-              <template v-if="record.meta_keywords">
-                <a-tag v-for="kw in (Array.isArray(record.meta_keywords) ? record.meta_keywords : String(record.meta_keywords).split(','))" :key="kw" size="small" class="mr-1">{{ kw }}</a-tag>
+              <template v-if="record.metaKeywords">
+                <a-tag v-for="kw in (Array.isArray(record.metaKeywords) ? record.metaKeywords : String(record.metaKeywords).split(','))" :key="kw" size="small" class="mr-1">{{ kw }}</a-tag>
               </template>
               <span v-else>-</span>
             </template>
@@ -41,16 +41,16 @@
     <a-modal v-model:visible="modalVisible" :title="isEdit ? '编辑SEO配置' : '新增SEO配置'" @ok="handleSubmit" :mask-closable="false">
       <a-form :model="form" layout="vertical">
         <a-form-item label="页面标识" required>
-          <a-input v-model="form.page_slug" placeholder="如 home, news, apps" />
+          <a-input v-model="form.pageSlug" placeholder="如 home, news, apps" />
         </a-form-item>
         <a-form-item label="Meta标题" required>
-          <a-input v-model="form.meta_title" placeholder="请输入Meta标题" />
+          <a-input v-model="form.metaTitle" placeholder="请输入Meta标题" />
         </a-form-item>
         <a-form-item label="Meta描述">
-          <a-textarea v-model="form.meta_description" placeholder="请输入Meta描述" :max-length="200" />
+          <a-textarea v-model="form.metaDescription" placeholder="请输入Meta描述" :max-length="200" />
         </a-form-item>
         <a-form-item label="关键词">
-          <a-input-tag v-model="form.meta_keywords" placeholder="输入后回车添加关键词" />
+          <a-input-tag v-model="form.metaKeywords" placeholder="输入后回车添加关键词" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -72,14 +72,14 @@ const editId = ref(0);
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
 const form = reactive({
-  page_slug: '',
-  meta_title: '',
-  meta_description: '',
-  meta_keywords: [] as string[],
+  pageSlug: '',
+  metaTitle: '',
+  metaDescription: '',
+  metaKeywords: [] as string[],
 });
 
 function resetForm() {
-  Object.assign(form, { page_slug: '', meta_title: '', meta_description: '', meta_keywords: [] });
+  Object.assign(form, { pageSlug: '', metaTitle: '', metaDescription: '', metaKeywords: [] });
 }
 
 async function fetchList() {
@@ -87,7 +87,7 @@ async function fetchList() {
   try {
     const res: any = await seoApi.getList(pagination.current, pagination.pageSize);
     if (res.success) {
-      list.value = res.data?.list || res.data?.items || [];
+      list.value = res.data?.items || [];
       pagination.total = res.data?.total || 0;
     }
   } catch { Message.error('获取列表失败'); }
@@ -103,9 +103,9 @@ function openModal(record?: any) {
     editId.value = record.id;
     Object.assign(form, {
       ...record,
-      meta_keywords: Array.isArray(record.meta_keywords)
-        ? record.meta_keywords
-        : record.meta_keywords ? String(record.meta_keywords).split(',') : [],
+      metaKeywords: Array.isArray(record.metaKeywords)
+        ? record.metaKeywords
+        : record.metaKeywords ? String(record.metaKeywords).split(',') : [],
     });
   } else {
     isEdit.value = false;
@@ -114,7 +114,7 @@ function openModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.page_slug || !form.meta_title) { Message.warning('请填写必填项'); return; }
+  if (!form.pageSlug || !form.metaTitle) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await seoApi.update(editId.value, form) : await seoApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }

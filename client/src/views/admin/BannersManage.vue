@@ -17,13 +17,13 @@
         <template #columns>
           <a-table-column title="预览" :width="120">
             <template #cell="{ record }">
-              <a-image v-if="record.image_url" :src="record.image_url" width="100" height="50" fit="cover" />
+              <a-image v-if="record.imageUrl" :src="record.imageUrl" width="100" height="50" fit="cover" />
               <span v-else>-</span>
             </template>
           </a-table-column>
           <a-table-column title="标题" data-index="title" :width="160" ellipsis />
-          <a-table-column title="链接" data-index="link_url" :width="200" ellipsis />
-          <a-table-column title="排序" data-index="sort_order" :width="80" />
+          <a-table-column title="链接" data-index="linkUrl" :width="200" ellipsis />
+          <a-table-column title="排序" data-index="sortOrder" :width="80" />
           <a-table-column title="状态" :width="80">
             <template #cell="{ record }">
               <a-tag :color="record.status === 'active' ? 'green' : 'red'">
@@ -49,7 +49,7 @@
           <a-input v-model="form.title" placeholder="请输入标题" />
         </a-form-item>
         <a-form-item label="链接">
-          <a-input v-model="form.link_url" placeholder="请输入跳转链接" />
+          <a-input v-model="form.linkUrl" placeholder="请输入跳转链接" />
         </a-form-item>
         <a-form-item label="图片" required>
           <a-upload :limit="1" list-type="picture-card" :custom-request="handleUpload" :file-list="fileList" @change="onFileChange" accept="image/*">
@@ -57,7 +57,7 @@
           </a-upload>
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="form.sort_order" :min="0" />
+          <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
           <a-select v-model="form.status">
@@ -83,10 +83,10 @@ const isEdit = ref(false);
 const editId = ref(0);
 const fileList = ref<any[]>([]);
 
-const form = reactive({ title: '', link_url: '', image_url: '', sort_order: 0, status: 'active' });
+const form = reactive({ title: '', linkUrl: '', imageUrl: '', sortOrder: 0, status: 'active' });
 
 function resetForm() {
-  Object.assign(form, { title: '', link_url: '', image_url: '', sort_order: 0, status: 'active' });
+  Object.assign(form, { title: '', linkUrl: '', imageUrl: '', sortOrder: 0, status: 'active' });
   fileList.value = [];
 }
 
@@ -94,7 +94,7 @@ async function fetchList() {
   loading.value = true;
   try {
     const res: any = await bannersApi.getList();
-    if (res.success) list.value = res.data?.list || res.data?.items || res.data || [];
+    if (res.success) list.value = res.data?.items || res.data || [];
   } catch { Message.error('获取列表失败'); }
   finally { loading.value = false; }
 }
@@ -105,7 +105,7 @@ function openModal(record?: any) {
     isEdit.value = true;
     editId.value = record.id;
     Object.assign(form, record);
-    if (record.image_url) fileList.value = [{ uid: '-1', name: 'image', url: record.image_url }];
+    if (record.imageUrl) fileList.value = [{ uid: '-1', name: 'image', url: record.imageUrl }];
   } else {
     isEdit.value = false;
   }
@@ -113,7 +113,7 @@ function openModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.title || !form.image_url) { Message.warning('请填写必填项'); return; }
+  if (!form.title || !form.imageUrl) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await bannersApi.update(editId.value, form) : await bannersApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }
@@ -131,7 +131,7 @@ async function handleDelete(id: number) {
 
 function handleUpload(options: any) {
   commonApi.uploadImage(options.fileItem?.file || options.file).then((res: any) => {
-    if (res.success) { form.image_url = res.data?.url || res.data; options.onSuccess(res); }
+    if (res.success) { form.imageUrl = res.data?.url || res.data; options.onSuccess(res); }
     else options.onError(res);
   }).catch((e: any) => { options.onError(e); });
   return { abort: () => {} };

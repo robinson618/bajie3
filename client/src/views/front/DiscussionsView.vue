@@ -51,14 +51,14 @@
                 :to="`/discussions/${item.id}`"
                 :class="[
                   'block bg-white rounded-xl p-5 hover:shadow-lg transition-shadow border',
-                  item.is_pinned ? 'border-[#1E50A0]/30 bg-[#1E50A0]/[0.02]' : 'border-gray-100'
+                  item.isPinned ? 'border-[#1E50A0]/30 bg-[#1E50A0]/[0.02]' : 'border-gray-100'
                 ]"
               >
                 <div class="flex">
                   <div class="flex-1">
                     <div class="flex items-center gap-2 mb-1">
                       <span
-                        v-if="item.is_pinned"
+                        v-if="item.isPinned"
                         class="text-xs px-2 py-0.5 bg-red-100 text-red-600 rounded font-medium"
                       >
                         <i class="fa fa-thumb-tack mr-1"></i>置顶
@@ -71,12 +71,12 @@
                     <p class="text-[#64748B] text-sm mb-3 line-clamp-2">{{ item.summary || item.content }}</p>
                     <div class="flex items-center gap-4 text-xs text-gray-400">
                       <span class="flex items-center gap-1">
-                        <img v-if="item.author_avatar" :src="item.author_avatar" class="w-4 h-4 rounded-full object-cover" />
+                        <img v-if="item.authorAvatar" :src="item.authorAvatar" class="w-4 h-4 rounded-full object-cover" />
                         {{ item.author || '匿名' }}
                       </span>
-                      <span>{{ formatDate(item.created_at) }}</span>
+                      <span>{{ formatDate(item.createdAt) }}</span>
                       <span><i class="fa fa-eye mr-1"></i>{{ item.views || 0 }}</span>
-                      <span><i class="fa fa-comment mr-1"></i>{{ item.comment_count || 0 }}</span>
+                      <span><i class="fa fa-comment mr-1"></i>{{ item.commentCount || 0 }}</span>
                     </div>
                   </div>
                 </div>
@@ -137,7 +137,7 @@
                   <img :src="user.avatar || 'https://picsum.photos/100/100'" :alt="user.username" class="w-10 h-10 rounded-full object-cover" />
                   <div class="flex-1">
                     <p class="text-sm font-medium">{{ user.username }}</p>
-                    <p class="text-xs text-[#64748B]">发布 {{ user.post_count || 0 }} 篇</p>
+                    <p class="text-xs text-[#64748B]">发布 {{ user.postCount || 0 }} 篇</p>
                   </div>
                 </div>
               </div>
@@ -203,7 +203,7 @@ async function fetchDiscussions() {
     const cat = activeCategory.value === '全部' ? undefined : activeCategory.value
     const res: any = await discussionsApi.getList(currentPage.value, pageSize, cat)
     if (res.success) {
-      discussions.value = res.data?.list || res.data || []
+      discussions.value = res.data?.items || []
       total.value = res.data?.total || discussions.value.length
       totalPages.value = Math.ceil(total.value / pageSize) || 1
     }

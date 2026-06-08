@@ -28,7 +28,7 @@
           >
             <div class="h-48 relative overflow-hidden">
               <img
-                :src="app.cover_image || 'https://picsum.photos/600/300'"
+                :src="app.coverImage || 'https://picsum.photos/600/300'"
                 :alt="app.title"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
@@ -53,10 +53,10 @@
                     <span class="text-xs text-[#64748B]">{{ app.likes || 0 }}</span>
                   </div>
                 </div>
-                <span class="text-xs text-gray-400">{{ formatDate(app.created_at) }}</span>
+                <span class="text-xs text-gray-400">{{ formatDate(app.createdAt) }}</span>
               </div>
-              <div v-if="parseTechStack(app.tech_stack).length" class="flex flex-wrap gap-2">
-                <span v-for="t in parseTechStack(app.tech_stack)" :key="t" class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded">{{ t }}</span>
+              <div v-if="parseTechStack(app.techStack).length" class="flex flex-wrap gap-2">
+                <span v-for="t in parseTechStack(app.techStack)" :key="t" class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded">{{ t }}</span>
               </div>
             </div>
           </router-link>
@@ -110,7 +110,7 @@ async function fetchApps() {
   try {
     const res: any = await appsApi.getList(currentPage.value, pageSize)
     if (res.success) {
-      appsList.value = res.data?.list || res.data || []
+      appsList.value = res.data?.items || []
       total.value = res.data?.total || appsList.value.length
       totalPages.value = Math.ceil(total.value / pageSize) || 1
     }

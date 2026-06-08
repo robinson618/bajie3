@@ -31,9 +31,9 @@
           <a-table :data="list" :pagination="pagination" :loading="loading" @page-change="onPageChange" row-key="id">
             <template #columns>
               <a-table-column title="标题" data-index="title" :width="200" ellipsis />
-              <a-table-column title="分类" data-index="category_name" :width="100" />
+              <a-table-column title="分类" data-index="categoryName" :width="100" />
               <a-table-column title="作者" data-index="author" :width="100" />
-              <a-table-column title="排序" data-index="sort_order" :width="80" />
+              <a-table-column title="排序" data-index="sortOrder" :width="80" />
               <a-table-column title="操作" :width="160" fixed="right">
                 <template #cell="{ record }">
                   <a-button type="text" size="small" @click="openModal(record)">编辑</a-button>
@@ -54,7 +54,7 @@
           <a-input v-model="form.title" placeholder="请输入标题" />
         </a-form-item>
         <a-form-item label="分类" required>
-          <a-select v-model="form.category_id" placeholder="请选择分类">
+          <a-select v-model="form.categoryId" placeholder="请选择分类">
             <a-option v-for="c in categoryList" :key="c.id" :value="c.id">{{ c.name }}</a-option>
           </a-select>
         </a-form-item>
@@ -65,7 +65,7 @@
           <a-textarea v-model="form.content" placeholder="请输入内容" :auto-size="{ minRows: 8 }" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="form.sort_order" :min="0" />
+          <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -76,7 +76,7 @@
           <a-input v-model="catForm.name" placeholder="请输入分类名称" />
         </a-form-item>
         <a-form-item label="父分类">
-          <a-select v-model="catForm.parent_id" placeholder="无（顶级分类）" allow-clear>
+          <a-select v-model="catForm.parentId" placeholder="无（顶级分类）" allow-clear>
             <a-option v-for="c in flatCategories" :key="c.id" :value="c.id">{{ c.name }}</a-option>
           </a-select>
         </a-form-item>
@@ -84,7 +84,7 @@
           <a-textarea v-model="catForm.description" placeholder="请输入描述" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="catForm.sort_order" :min="0" />
+          <a-input-number v-model="catForm.sortOrder" :min="0" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -112,8 +112,8 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ title: '', category_id: undefined as number | undefined, author: '', content: '', sort_order: 0 });
-const catForm = reactive({ name: '', parent_id: undefined as number | undefined, description: '', sort_order: 0 });
+const form = reactive({ title: '', categoryId: undefined as number | undefined, author: '', content: '', sortOrder: 0 });
+const catForm = reactive({ name: '', parentId: undefined as number | undefined, description: '', sortOrder: 0 });
 
 const categoryTree = computed(() => {
   const items = [...categoryList.value];
@@ -122,22 +122,22 @@ const categoryTree = computed(() => {
   items.forEach((item: any) => { map.set(item.id, { ...item, children: [] }); });
   items.forEach((item: any) => {
     const node = map.get(item.id);
-    if (item.parent_id && map.has(item.parent_id)) map.get(item.parent_id).children.push(node);
+    if (item.parentId && map.has(item.parentId)) map.get(item.parentId).children.push(node);
     else roots.push(node);
   });
   return roots;
 });
 
-const flatCategories = computed(() => categoryList.value.filter((c: any) => !c.parent_id));
+const flatCategories = computed(() => categoryList.value.filter((c: any) => !c.parentId));
 
-function resetForm() { Object.assign(form, { title: '', category_id: undefined, author: '', content: '', sort_order: 0 }); }
-function resetCatForm() { Object.assign(catForm, { name: '', parent_id: undefined, description: '', sort_order: 0 }); }
+function resetForm() { Object.assign(form, { title: '', categoryId: undefined, author: '', content: '', sortOrder: 0 }); }
+function resetCatForm() { Object.assign(catForm, { name: '', parentId: undefined, description: '', sortOrder: 0 }); }
 
 async function fetchList() {
   loading.value = true;
   try {
     const res: any = await documentsApi.getList(pagination.current, pagination.pageSize, selectedCategoryId.value);
-    if (res.success) { list.value = res.data?.list || res.data?.items || []; pagination.total = res.data?.total || 0; }
+    if (res.success) { list.value = res.data?.items || []; pagination.total = res.data?.total || 0; }
   } catch { Message.error('获取列表失败'); }
   finally { loading.value = false; }
 }
@@ -145,7 +145,7 @@ async function fetchList() {
 async function fetchCategories() {
   try {
     const res: any = await documentsApi.getCategories();
-    if (res.success) categoryList.value = res.data?.list || res.data?.items || res.data || [];
+    if (res.success) categoryList.value = res.data?.items || res.data || [];
   } catch { Message.error('获取分类失败'); }
 }
 
@@ -161,7 +161,7 @@ function onPageChange(page: number) { pagination.current = page; fetchList(); }
 function openModal(record?: any) {
   resetForm();
   if (record) { isEdit.value = true; editId.value = record.id; Object.assign(form, record); }
-  else { isEdit.value = false; if (selectedCategoryId.value) form.category_id = selectedCategoryId.value; }
+  else { isEdit.value = false; if (selectedCategoryId.value) form.categoryId = selectedCategoryId.value; }
   modalVisible.value = true;
 }
 
@@ -173,7 +173,7 @@ function openCategoryModal(record?: any) {
 }
 
 async function handleSubmit() {
-  if (!form.title || !form.category_id) { Message.warning('请填写必填项'); return; }
+  if (!form.title || !form.categoryId) { Message.warning('请填写必填项'); return; }
   try {
     const res: any = isEdit.value ? await documentsApi.update(editId.value, form) : await documentsApi.create(form);
     if (res.success) { Message.success(isEdit.value ? '更新成功' : '创建成功'); modalVisible.value = false; fetchList(); }

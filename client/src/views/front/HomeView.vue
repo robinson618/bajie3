@@ -109,12 +109,12 @@
             :to="`/news/${item.id}`"
             class="rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group bg-white"
           >
-            <img :src="item.cover_image || 'https://picsum.photos/600/338'" class="w-full aspect-video object-cover" :alt="item.title" />
+            <img :src="item.coverImage || 'https://picsum.photos/600/338'" class="w-full aspect-video object-cover" :alt="item.title" />
             <div class="p-6 pt-4">
               <h4 class="font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-1">{{ item.title }}</h4>
               <p class="text-neutral text-sm mb-4 min-h-[40px]">{{ item.summary || '' }}</p>
               <div class="flex justify-between items-center">
-                <span class="text-xs text-gray-400">{{ formatDate(item.created_at) }}</span>
+                <span class="text-xs text-gray-400">{{ formatDate(item.createdAt) }}</span>
                 <span class="text-xs text-primary group-hover:translate-x-1 transition-transform">
                   <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                   查看详情
@@ -257,8 +257,8 @@ interface NewsItem {
   id: number;
   title: string;
   summary?: string;
-  cover_image?: string;
-  created_at: string;
+  coverImage?: string;
+  createdAt: string;
 }
 
 interface Activity {
@@ -334,7 +334,7 @@ onMounted(async () => {
     }
 
     if (newsRes.status === 'fulfilled' && newsRes.value?.success) {
-      newsList.value = newsRes.value.data?.list || newsRes.value.data || [];
+      newsList.value = newsRes.value.data?.items || [];
     }
 
     if (statsRes.status === 'fulfilled' && statsRes.value?.success) {

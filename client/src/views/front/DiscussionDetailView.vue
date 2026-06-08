@@ -30,11 +30,11 @@
                 <div class="flex items-start justify-between mb-4">
                   <div class="flex-1">
                     <div class="flex items-center gap-2 mb-3">
-                      <span v-if="discussion.is_pinned" class="text-xs px-2 py-0.5 bg-red-100 text-red-600 rounded-full">
+                      <span v-if="discussion.isPinned" class="text-xs px-2 py-0.5 bg-red-100 text-red-600 rounded-full">
                         <i class="fa fa-thumb-tack mr-1"></i>置顶
                       </span>
                       <span class="text-xs px-2 py-1 bg-[#1E50A0]/10 text-[#1E50A0] rounded-full">{{ discussion.category || '技术问答' }}</span>
-                      <span class="text-[#64748B] text-sm">发布于 {{ formatDate(discussion.created_at) }}</span>
+                      <span class="text-[#64748B] text-sm">发布于 {{ formatDate(discussion.createdAt) }}</span>
                     </div>
                     <h1 class="text-2xl font-bold mb-4">{{ discussion.title }}</h1>
                   </div>
@@ -42,18 +42,18 @@
 
                 <!-- 用户信息 -->
                 <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-100">
-                  <img :src="discussion.author_avatar || 'https://picsum.photos/100/100'" class="w-12 h-12 rounded-full object-cover" alt="用户头像" />
+                  <img :src="discussion.authorAvatar || 'https://picsum.photos/100/100'" class="w-12 h-12 rounded-full object-cover" alt="用户头像" />
                   <div>
                     <p class="font-medium">{{ discussion.author || '匿名用户' }}</p>
                     <p class="text-sm text-[#64748B]">
-                      发布 {{ discussion.author_post_count || 0 }} 篇 · 关注 {{ discussion.author_followers || 0 }}
+                      发布 {{ discussion.authorPostCount || 0 }} 篇 · 关注 {{ discussion.authorFollowers || 0 }}
                     </p>
                   </div>
                   <span
-                    v-if="discussion.author_level"
-                    :class="['level-badge', `level-${discussion.author_level}`]"
+                    v-if="discussion.authorLevel"
+                    :class="['level-badge', `level-${discussion.authorLevel}`]"
                   >
-                    Lv.{{ discussion.author_level }}
+                    Lv.{{ discussion.authorLevel }}
                   </span>
                 </div>
 
@@ -65,11 +65,11 @@
                   <div class="flex items-center gap-6">
                     <button class="flex items-center gap-2 text-[#64748B] hover:text-[#1E50A0] transition-colors">
                       <i class="fa fa-thumbs-up"></i>
-                      <span>{{ discussion.like_count || 0 }}</span>
+                      <span>{{ discussion.likeCount || 0 }}</span>
                     </button>
                     <button class="flex items-center gap-2 text-[#64748B] hover:text-[#1E50A0] transition-colors">
                       <i class="fa fa-comment"></i>
-                      <span>{{ discussion.comment_count || 0 }} 评论</span>
+                      <span>{{ discussion.commentCount || 0 }} 评论</span>
                     </button>
                     <button class="flex items-center gap-2 text-[#64748B] hover:text-[#1E50A0] transition-colors">
                       <i class="fa fa-share-alt"></i>
@@ -85,7 +85,7 @@
 
               <!-- 评论区 -->
               <section class="mt-8">
-                <h2 class="text-xl font-bold mb-6">评论 ({{ discussion.comment_count || 0 }})</h2>
+                <h2 class="text-xl font-bold mb-6">评论 ({{ discussion.commentCount || 0 }})</h2>
 
                 <!-- 评论输入 -->
                 <div class="bg-white rounded-xl p-5 border border-gray-100 mb-6">
@@ -116,17 +116,17 @@
                 <div class="space-y-6">
                   <div v-for="comment in comments" :key="comment.id" class="bg-white rounded-xl p-5 border border-gray-100">
                     <div class="flex items-start gap-4">
-                      <img :src="comment.author_avatar || 'https://picsum.photos/100/100'" :alt="comment.author" class="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                      <img :src="comment.authorAvatar || 'https://picsum.photos/100/100'" :alt="comment.author" class="w-10 h-10 rounded-full object-cover flex-shrink-0" />
                       <div class="flex-1">
                         <div class="flex items-center justify-between mb-2">
                           <span class="font-medium">{{ comment.author || '匿名' }}</span>
-                          <span class="text-[#64748B] text-sm">{{ formatDate(comment.created_at) }}</span>
+                          <span class="text-[#64748B] text-sm">{{ formatDate(comment.createdAt) }}</span>
                         </div>
                         <p class="text-gray-700">{{ comment.content }}</p>
                         <div class="flex items-center gap-4 mt-3">
                           <button class="flex items-center gap-1 text-[#64748B] hover:text-[#1E50A0] text-sm transition-colors">
                             <i class="fa fa-thumbs-up"></i>
-                            <span>{{ comment.like_count || 0 }}</span>
+                            <span>{{ comment.likeCount || 0 }}</span>
                           </button>
                           <button class="text-[#64748B] hover:text-[#1E50A0] text-sm transition-colors">回复</button>
                         </div>

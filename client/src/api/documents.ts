@@ -2,7 +2,7 @@ import request from './request';
 
 export const documentsApi = {
   getList: (page = 1, pageSize = 10, categoryId?: number) =>
-    request.get('/documents', { params: { page, pageSize, category_id: categoryId } }),
+    request.get('/documents', { params: { page, pageSize, categoryId } }),
   getDetail: (id: number) =>
     request.get(`/documents/${id}`),
   create: (data: any) =>

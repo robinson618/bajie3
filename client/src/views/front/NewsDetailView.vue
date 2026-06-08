@@ -33,7 +33,7 @@
                 <div class="flex-1">
                   <div class="flex items-center gap-2 mb-3">
                     <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">{{ news.category || '未分类' }}</span>
-                    <span class="text-[#64748B] text-sm">发布于 {{ news.created_at }}</span>
+                    <span class="text-[#64748B] text-sm">发布于 {{ news.createdAt }}</span>
                   </div>
                   <h1 class="text-2xl font-bold mb-4">{{ news.title }}</h1>
                 </div>

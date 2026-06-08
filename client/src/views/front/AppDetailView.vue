@@ -28,7 +28,7 @@
         <div v-else-if="app" class="bg-white rounded-xl shadow-lg overflow-hidden">
           <!-- 封面图/视频 -->
           <div class="h-[360px] md:h-[562px] relative overflow-hidden">
-            <img :src="app.cover_image || 'https://picsum.photos/1000/400'" :alt="app.title" class="w-full h-full object-cover" />
+            <img :src="app.coverImage || 'https://picsum.photos/1000/400'" :alt="app.title" class="w-full h-full object-cover" />
             <div v-if="app.video" @click="playVideo" class="absolute inset-0 bg-black/30 flex items-center justify-center cursor-pointer">
               <div class="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/30 transition-colors">
                 <i class="fa fa-play text-white text-3xl ml-1"></i>
@@ -48,7 +48,7 @@
 
             <!-- 日期 + 浏览 + 点赞 -->
             <div class="flex items-center gap-4 mb-6">
-              <span class="text-[#64748B] text-sm">{{ app.created_at ? `发布于 ${app.created_at.split('T')[0]}` : '' }}</span>
+              <span class="text-[#64748B] text-sm">{{ app.createdAt ? `发布于 ${app.createdAt.split('T')[0]}` : '' }}</span>
               <div class="flex items-center gap-1.5">
                 <i class="fa fa-eye text-[#64748B] text-sm"></i>
                 <span class="text-xs text-[#64748B]">{{ formatViews(app.views) }}</span>
@@ -84,8 +84,8 @@
             <!-- 操作按钮 -->
             <div class="flex items-center gap-3">
               <a
-                v-if="app.github_url"
-                :href="app.github_url"
+                v-if="app.githubUrl"
+                :href="app.githubUrl"
                 target="_blank"
                 class="flex items-center flex-1 py-3 bg-[#1E50A0] text-white rounded-lg hover:bg-[#174080] transition-colors justify-center"
               >
@@ -127,7 +127,7 @@ function formatViews(num: number) {
 }
 
 const techStackList = computed(() => {
-  const val = app.value?.tech_stack
+  const val = app.value?.techStack
   if (!val) return []
   if (typeof val === 'string') return val.split(',').map((s: string) => s.trim()).filter(Boolean)
   if (Array.isArray(val)) return val

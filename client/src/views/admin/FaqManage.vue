@@ -33,8 +33,8 @@
           <template #columns>
             <a-table-column title="问题" data-index="question" :width="240" ellipsis />
             <a-table-column title="分类" data-index="category" :width="100" />
-            <a-table-column title="排序" data-index="sort_order" :width="80" />
-            <a-table-column title="浏览量" data-index="view_count" :width="80" />
+            <a-table-column title="排序" data-index="sortOrder" :width="80" />
+            <a-table-column title="浏览量" data-index="viewCount" :width="80" />
             <a-table-column title="状态" :width="80">
               <template #cell="{ record }">
                 <a-tag :color="record.status === 'published' ? 'green' : 'orange'">
@@ -63,7 +63,7 @@
           <template #columns>
             <a-table-column title="分类名称" data-index="name" />
             <a-table-column title="描述" data-index="description" />
-            <a-table-column title="排序" data-index="sort_order" :width="80" />
+            <a-table-column title="排序" data-index="sortOrder" :width="80" />
             <a-table-column title="操作" :width="160">
               <template #cell="{ record }">
                 <a-button type="text" size="small" @click="openCategoryModal(record)">编辑</a-button>
@@ -91,7 +91,7 @@
           <a-textarea v-model="form.answer" placeholder="请输入回答" :auto-size="{ minRows: 4 }" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="form.sort_order" :min="0" />
+          <a-input-number v-model="form.sortOrder" :min="0" />
         </a-form-item>
         <a-form-item label="状态">
           <a-select v-model="form.status">
@@ -111,7 +111,7 @@
           <a-textarea v-model="catForm.description" placeholder="请输入描述" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model="catForm.sort_order" :min="0" />
+          <a-input-number v-model="catForm.sortOrder" :min="0" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -140,14 +140,14 @@ const editCatId = ref(0);
 
 const pagination = reactive({ current: 1, pageSize: 10, total: 0, showTotal: true });
 
-const form = reactive({ question: '', category: '', answer: '', sort_order: 0, status: 'draft' });
-const catForm = reactive({ name: '', description: '', sort_order: 0 });
+const form = reactive({ question: '', category: '', answer: '', sortOrder: 0, status: 'draft' });
+const catForm = reactive({ name: '', description: '', sortOrder: 0 });
 
 function resetForm() {
-  Object.assign(form, { question: '', category: '', answer: '', sort_order: 0, status: 'draft' });
+  Object.assign(form, { question: '', category: '', answer: '', sortOrder: 0, status: 'draft' });
 }
 function resetCatForm() {
-  Object.assign(catForm, { name: '', description: '', sort_order: 0 });
+  Object.assign(catForm, { name: '', description: '', sortOrder: 0 });
 }
 
 async function fetchList() {
@@ -155,7 +155,7 @@ async function fetchList() {
   try {
     const res: any = await faqApi.getList(pagination.current, pagination.pageSize, faqCategory.value || undefined);
     if (res.success) {
-      list.value = res.data?.list || res.data?.items || [];
+      list.value = res.data?.items || [];
       pagination.total = res.data?.total || 0;
     }
   } catch { Message.error('获取列表失败'); }
@@ -166,7 +166,7 @@ async function fetchCategories() {
   catLoading.value = true;
   try {
     const res: any = await faqApi.getCategories();
-    if (res.success) categoryList.value = res.data?.list || res.data?.items || res.data || [];
+    if (res.success) categoryList.value = res.data?.items || res.data || [];
   } catch { Message.error('获取分类失败'); }
   finally { catLoading.value = false; }
 }
