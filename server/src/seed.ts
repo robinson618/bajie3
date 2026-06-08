@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config({ path: [__dirname + '/../../.env', __dirname + '/../.env'] });
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { User } from './entities/user.entity';
@@ -9,6 +11,7 @@ import { Skill } from './entities/skill.entity';
 import { App } from './entities/app.entity';
 import { AppCapability } from './entities/app-capability.entity';
 import { Discussion } from './entities/discussion.entity';
+import { DiscussionComment } from './entities/discussion-comment.entity';
 import { DocCategory } from './entities/doc-category.entity';
 import { DocSubcategory } from './entities/doc-subcategory.entity';
 import { Document } from './entities/document.entity';
@@ -39,6 +42,7 @@ const AppDataSource = new DataSource({
     App,
     AppCapability,
     Discussion,
+    DiscussionComment,
     DocCategory,
     DocSubcategory,
     Document,
