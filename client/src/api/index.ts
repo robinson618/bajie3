@@ -14,3 +14,4 @@ export { navMenusApi } from './nav-menus';
 export { footerApi } from './footer';
 export { pagesApi } from './pages';
 export { seoApi } from './seo';
+export { activitiesApi } from './activities';

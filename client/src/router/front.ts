@@ -18,6 +18,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'docs', name: 'docs', component: () => import('@/views/front/DocumentationView.vue') },
       { path: 'faq', name: 'faq', component: () => import('@/views/front/FaqView.vue') },
       { path: 'open-source', name: 'open-source', component: () => import('@/views/front/OpenSourceView.vue') },
+      { path: 'activities', name: 'activities', component: () => import('@/views/front/ActivitiesView.vue') },
       { path: 'login', name: 'login', component: () => import('@/views/front/LoginView.vue') },
       { path: 'register', name: 'register', component: () => import('@/views/front/RegisterView.vue') },
     ],

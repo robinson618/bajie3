@@ -19,14 +19,14 @@
             <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white mb-4" v-html="banner.title"></h2>
             <p v-if="banner.subtitle" class="text-gray-300 text-lg max-w-2xl mx-auto mb-8">{{ banner.subtitle }}</p>
             <div v-if="banner.link" class="flex flex-wrap justify-center gap-4">
-              <a
-                :href="banner.link"
+              <router-link
+                :to="banner.link"
                 class="px-6 py-3 text-white rounded-md flex items-center gap-2 transition-all duration-300 hover:scale-105"
                 style="background: linear-gradient(45deg, #578DFF, #1E50A0)"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 了解更多
-              </a>
+              </router-link>
             </div>
           </div>
         </div>

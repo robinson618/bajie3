@@ -100,7 +100,7 @@ async function seed() {
           title: '链接具身智能·赋能机器人生态',
           subtitle: '集云端仿真、开源开发、技术交流、项目孵化、需求对接于一体',
           image: 'https://images.pexels.com/photos/28428592/pexels-photo-28428592.jpeg',
-          link: '/dev.html',
+          link: '/skills',
           sortOrder: 1,
           isActive: 1,
         } as Partial<Banner> as Banner,
@@ -108,7 +108,7 @@ async function seed() {
           title: '科沃斯首款搭载OpenClaw的管家机器人',
           subtitle: '智能感知、精准抓取、自主导航，重新定义家庭服务体验',
           image: 'https://images.pexels.com/photos/5240547/pexels-photo-5240547.jpeg',
-          link: '#',
+          link: '/apps',
           sortOrder: 2,
           isActive: 1,
         } as Partial<Banner> as Banner,
@@ -116,7 +116,7 @@ async function seed() {
           title: '开发者入驻·技术共创空间',
           subtitle: '设备支持、场地提供、项目孵化、资源对接',
           image: 'https://images.pexels.com/photos/8566473/pexels-photo-8566473.jpeg',
-          link: '#',
+          link: '/discussions',
           sortOrder: 3,
           isActive: 1,
         } as Partial<Banner> as Banner,
@@ -681,13 +681,24 @@ async function seed() {
     const navMenuRepo = AppDataSource.getRepository(NavMenu);
     const navMenuCount = await navMenuRepo.count();
     if (navMenuCount === 0) {
-      await navMenuRepo.save([
+      // 先插入父菜单
+      const parentMenus = await navMenuRepo.save([
         { title: '首页', url: '/', icon: 'fa-home', parentId: 0, target: '_self', sortOrder: 1, isActive: 1 } as Partial<NavMenu> as NavMenu,
-        { title: '开发者', url: '/dev', icon: 'fa-code', parentId: 0, target: '_self', sortOrder: 2, isActive: 1 } as Partial<NavMenu> as NavMenu,
-        { title: '社区', url: '/community', icon: 'fa-users', parentId: 0, target: '_self', sortOrder: 3, isActive: 1 } as Partial<NavMenu> as NavMenu,
-        { title: '开源', url: '/open-source', icon: 'fa-github', parentId: 0, target: '_self', sortOrder: 4, isActive: 1 } as Partial<NavMenu> as NavMenu,
-        { title: '文档', url: '/docs', icon: 'fa-book', parentId: 0, target: '_self', sortOrder: 5, isActive: 1 } as Partial<NavMenu> as NavMenu,
-        { title: '关于', url: '/about', icon: 'fa-info-circle', parentId: 0, target: '_self', sortOrder: 6, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '前沿资讯', url: '/news', icon: 'fa-newspaper', parentId: 0, target: '_self', sortOrder: 2, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '开发者平台', url: '#' , icon: 'fa-code', parentId: 0, target: '_self', sortOrder: 3, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '社区', url: '#' , icon: 'fa-users', parentId: 0, target: '_self', sortOrder: 8, isActive: 1 } as Partial<NavMenu> as NavMenu,
+      ]);
+      // 再插入子菜单，parentId 引用父菜单的实际 id
+      const devPlatform = parentMenus.find(m => m.title === '开发者平台');
+      const community = parentMenus.find(m => m.title === '社区');
+      await navMenuRepo.save([
+        { title: 'Skill市场', url: '/skills', icon: 'fa-puzzle-piece', parentId: devPlatform!.id, target: '_self', sortOrder: 4, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '应用实例', url: '/apps', icon: 'fa-robot', parentId: devPlatform!.id, target: '_self', sortOrder: 5, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '文档中心', url: '/docs', icon: 'fa-book', parentId: devPlatform!.id, target: '_self', sortOrder: 6, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '开源中心', url: '/open-source', icon: 'fa-github', parentId: devPlatform!.id, target: '_self', sortOrder: 7, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '讨论区', url: '/discussions', icon: 'fa-comments', parentId: community!.id, target: '_self', sortOrder: 9, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '常见问题', url: '/faq', icon: 'fa-question-circle', parentId: community!.id, target: '_self', sortOrder: 10, isActive: 1 } as Partial<NavMenu> as NavMenu,
+        { title: '活动', url: '/activities', icon: 'fa-calendar', parentId: community!.id, target: '_self', sortOrder: 11, isActive: 1 } as Partial<NavMenu> as NavMenu,
       ]);
       console.log('✅ 导航菜单数据插入成功');
     } else {
@@ -707,8 +718,8 @@ async function seed() {
         { sectionTitle: '社区', title: '活动', url: '/activities', sortOrder: 6, isActive: 1 } as Partial<FooterItem> as FooterItem,
         { sectionTitle: '资源', title: '开源项目', url: '/open-source', sortOrder: 7, isActive: 1 } as Partial<FooterItem> as FooterItem,
         { sectionTitle: '资源', title: 'FAQ', url: '/faq', sortOrder: 8, isActive: 1 } as Partial<FooterItem> as FooterItem,
-        { sectionTitle: '关于', title: '关于我们', url: '/about', sortOrder: 9, isActive: 1 } as Partial<FooterItem> as FooterItem,
-        { sectionTitle: '关于', title: '联系我们', url: '/contact', sortOrder: 10, isActive: 1 } as Partial<FooterItem> as FooterItem,
+        { sectionTitle: '关于', title: '关于我们', url: '/docs', sortOrder: 9, isActive: 1 } as Partial<FooterItem> as FooterItem,
+        { sectionTitle: '关于', title: '联系我们', url: '/faq', sortOrder: 10, isActive: 1 } as Partial<FooterItem> as FooterItem,
       ]);
       console.log('✅ Footer项数据插入成功');
     } else {

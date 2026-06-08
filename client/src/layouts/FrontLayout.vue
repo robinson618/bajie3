@@ -20,9 +20,9 @@
             <template v-for="menu in navMenus" :key="menu.id">
               <router-link
                 v-if="!menu.children?.length"
-                :to="menu.path"
+                :to="menu.url"
                 class="px-4 py-5 hover:text-primary transition-colors"
-                :class="isActive(menu.path) ? 'text-primary border-b-2 border-primary' : 'text-dark'"
+                :class="isActive(menu.url) ? 'text-primary border-b-2 border-primary' : 'text-dark'"
               >
                 {{ menu.title }}
               </router-link>
@@ -35,7 +35,7 @@
                   <router-link
                     v-for="child in menu.children"
                     :key="child.id"
-                    :to="child.path"
+                    :to="child.url"
                     class="block px-4 py-2 hover:bg-gray-50 transition-colors text-dark"
                   >
                     {{ child.title }}
@@ -85,7 +85,7 @@
             <template v-for="menu in navMenus" :key="menu.id">
               <router-link
                 v-if="!menu.children?.length"
-                :to="menu.path"
+                :to="menu.url"
                 class="block px-4 py-3 hover:bg-gray-50 rounded-lg transition-colors"
                 @click="mobileMenuOpen = false"
               >
@@ -100,7 +100,7 @@
                   <router-link
                     v-for="child in menu.children"
                     :key="child.id"
-                    :to="child.path"
+                    :to="child.url"
                     class="block px-6 py-2 hover:bg-gray-100 transition-colors"
                     @click="mobileMenuOpen = false"
                   >
@@ -252,7 +252,7 @@ const showTechSupport = ref(false);
 interface NavItem {
   id: number;
   title: string;
-  path: string;
+  url: string;
   children?: NavItem[];
 }
 
@@ -263,7 +263,7 @@ function isActive(path: string) {
 }
 
 function isGroupActive(children: NavItem[]) {
-  return children.some((c) => route.path.startsWith(c.path));
+  return children.some((c) => route.path.startsWith(c.url));
 }
 
 function toggleMobileSub(id: number) {
@@ -283,20 +283,20 @@ onMounted(async () => {
     }
   } catch {
     navMenus.value = [
-      { id: 1, title: '首页', path: '/' },
-      { id: 2, title: '前沿资讯', path: '/news' },
+      { id: 1, title: '首页', url: '/' },
+      { id: 2, title: '前沿资讯', url: '/news' },
       {
         id: 3,
         title: '开发者平台',
-        path: '',
+        url: '',
         children: [
-          { id: 31, title: '文档中心', path: '/docs' },
-          { id: 32, title: '开源中心', path: '/open-source' },
-          { id: 33, title: '常见问题', path: '/faq' },
+          { id: 31, title: '文档中心', url: '/docs' },
+          { id: 32, title: '开源中心', url: '/open-source' },
+          { id: 33, title: '常见问题', url: '/faq' },
         ],
       },
-      { id: 4, title: '应用实例', path: '/apps' },
-      { id: 5, title: 'Skill应用市场', path: '/skills' },
+      { id: 4, title: '应用实例', url: '/apps' },
+      { id: 5, title: 'Skill应用市场', url: '/skills' },
     ];
   }
 });
