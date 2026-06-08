@@ -18,6 +18,9 @@ import { PagesModule } from './modules/pages/pages.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { UsersModule } from './modules/users/users.module';
 import { StatsModule } from './modules/stats/stats.module';
+import { BannersModule } from './modules/banners/banners.module';
+import { DemandsModule } from './modules/demands/demands.module';
+import { IncubateModule } from './modules/incubate/incubate.module';
 
 @Module({
   imports: [
@@ -45,6 +48,9 @@ import { StatsModule } from './modules/stats/stats.module';
     UploadModule,
     UsersModule,
     StatsModule,
+    BannersModule,
+    DemandsModule,
+    IncubateModule,
   ],
 })
 export class AppModule {}
