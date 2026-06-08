@@ -29,4 +29,3 @@ export class TransformInterceptor<T>
     );
   }
 }
-ENDOFFILE; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-3a1766a926e644f5a6e0f48f3da047c5/cwd.txt'; exit "$__tr_native_ec"

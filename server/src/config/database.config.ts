@@ -15,4 +15,3 @@ export const getDatabaseConfig = (
   logging: configService.get<string>('NODE_ENV') === 'development',
   charset: 'utf8mb4',
 });
-ENDOFFILE; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-d0629fbd4bf645dd98676563910dd358/cwd.txt'; exit "$__tr_native_ec"

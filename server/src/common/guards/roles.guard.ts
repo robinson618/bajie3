@@ -26,4 +26,3 @@ export class RolesGuard implements CanActivate {
     return true;
   }
 }
-EOF; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-8e40ce7776164e9eaa98aa9a69d36ef2/cwd.txt'; exit "$__tr_native_ec"

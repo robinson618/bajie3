@@ -37,4 +37,3 @@ async function bootstrap() {
   console.log(`服务运行在 http://localhost:${port}`);
 }
 bootstrap();
-ENDOFFILE; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-bfd8dc3cc920413887db0fa248423209/cwd.txt'; exit "$__tr_native_ec"

@@ -35,4 +35,3 @@ export class AllExceptionsFilter implements ExceptionFilter {
     });
   }
 }
-ENDOFFILE; __tr_native_ec=$?; pwd -P >| '/var/folders/bj/brc4gsps4tjgknm93lxfcwvr0000gn/T/agent-toolhost/jobs/job-b588da78976d40c8bedf793c3c28bed3/cwd.txt'; exit "$__tr_native_ec"
