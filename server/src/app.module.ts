@@ -11,6 +11,9 @@ import { FaqModule } from './modules/faq/faq.module';
 import { OpenSourceModule } from './modules/open-source/open-source.module';
 import { DiscussionsModule } from './modules/discussions/discussions.module';
 import { DocumentsModule } from './modules/documents/documents.module';
+import { DemandsModule } from './modules/demands/demands.module';
+import { IncubateModule } from './modules/incubate/incubate.module';
+import { BannersModule } from './modules/banners/banners.module';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { DocumentsModule } from './modules/documents/documents.module';
     OpenSourceModule,
     DiscussionsModule,
     DocumentsModule,
+    DemandsModule,
+    IncubateModule,
+    BannersModule,
   ],
 })
 export class AppModule {}
